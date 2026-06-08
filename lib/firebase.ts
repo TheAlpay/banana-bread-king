@@ -15,24 +15,23 @@ function getFirebaseApp(): FirebaseApp {
   })
 }
 
-// Lazy proxies — only initialize when first property is accessed (client-side only)
+// auth — Proxy works here because Firebase auth methods use property access internally
 export const auth: Auth = new Proxy({} as Auth, {
   get(_t, prop) {
     return (getAuth(getFirebaseApp()) as unknown as Record<string | symbol, unknown>)[prop]
   },
 })
 
-export const db: Firestore = new Proxy({} as Firestore, {
-  get(_t, prop) {
-    return (getFirestore(getFirebaseApp()) as unknown as Record<string | symbol, unknown>)[prop]
-  },
-})
+// db — must return the real Firestore instance; Firestore SDK uses instanceof checks
+// internally (e.g. inside doc(), collection()) which Proxies fail.
+export function getDb(): Firestore {
+  return getFirestore(getFirebaseApp())
+}
 
-export const storage: FirebaseStorage = new Proxy({} as FirebaseStorage, {
-  get(_t, prop) {
-    return (getStorage(getFirebaseApp()) as unknown as Record<string | symbol, unknown>)[prop]
-  },
-})
+// storage — same reason as db
+export function getStorageInstance(): FirebaseStorage {
+  return getStorage(getFirebaseApp())
+}
 
 export default new Proxy({} as FirebaseApp, {
   get(_t, prop) {

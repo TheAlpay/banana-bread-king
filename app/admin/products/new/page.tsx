@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { addDoc, collection } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import { Range, Variety } from '@/types'
 import Button from '@/components/ui/Button'
 
@@ -39,7 +39,7 @@ export default function NewProductPage() {
     if (!form.varieties.length) { alert('Select at least one variety'); return }
     setSaving(true)
     try {
-      await addDoc(collection(db, 'products'), {
+      await addDoc(collection(getDb(), 'products'), {
         ...form,
         features: form.features.split(',').map((f) => f.trim()).filter(Boolean),
         basePrice: Math.round(Number(form.basePrice) * 100),

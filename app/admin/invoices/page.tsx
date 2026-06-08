@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { getDocs, collection, orderBy, query } from 'firebase/firestore'
-import { db, auth } from '@/lib/firebase'
+import { getDb, auth } from '@/lib/firebase'
 import { OrderDoc } from '@/types'
 import Button from '@/components/ui/Button'
 
@@ -12,7 +12,7 @@ export default function AdminInvoicesPage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null)
 
   useEffect(() => {
-    getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc'))).then((snap) => {
+    getDocs(query(collection(getDb(), 'orders'), orderBy('createdAt', 'desc'))).then((snap) => {
       setOrders(snap.docs.map((d) => ({ id: d.id, ...d.data() } as OrderDoc)).filter((o) => o.invoiceNumber))
       setLoading(false)
     })

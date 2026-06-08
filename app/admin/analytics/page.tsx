@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { getDocs, collection, orderBy, query } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import { OrderDoc } from '@/types'
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
@@ -17,7 +17,7 @@ export default function AdminAnalyticsPage() {
   const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly'>('monthly')
 
   useEffect(() => {
-    getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'asc'))).then((snap) => {
+    getDocs(query(collection(getDb(), 'orders'), orderBy('createdAt', 'asc'))).then((snap) => {
       setOrders(snap.docs.map((d) => ({ id: d.id, ...d.data() } as OrderDoc)))
       setLoading(false)
     })

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { getDocs, collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import { DiscountCodeDoc } from '@/types'
 import Button from '@/components/ui/Button'
 
@@ -22,7 +22,7 @@ export default function AdminDiscountsPage() {
   })
 
   async function fetchDiscounts() {
-    const snap = await getDocs(collection(db, 'discountCodes'))
+    const snap = await getDocs(collection(getDb(), 'discountCodes'))
     setDiscounts(snap.docs.map((d) => ({ id: d.id, ...d.data() } as DiscountCodeDoc)))
     setLoading(false)
   }
@@ -45,7 +45,7 @@ export default function AdminDiscountsPage() {
         usedBy: [],
         createdAt: new Date().toISOString(),
       }
-      const ref = await addDoc(collection(db, 'discountCodes'), data)
+      const ref = await addDoc(collection(getDb(), 'discountCodes'), data)
       setDiscounts((prev) => [...prev, { id: ref.id, ...data } as DiscountCodeDoc])
       setForm({ code: '', type: 'percentage', value: '', minOrderAmount: '', maxUses: '', expiresAt: '', active: true })
       setShowForm(false)
@@ -55,13 +55,13 @@ export default function AdminDiscountsPage() {
   }
 
   async function toggleActive(id: string, active: boolean) {
-    await updateDoc(doc(db, 'discountCodes', id), { active: !active })
+    await updateDoc(doc(getDb(), 'discountCodes', id), { active: !active })
     setDiscounts((prev) => prev.map((d) => d.id === id ? { ...d, active: !active } : d))
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this discount code?')) return
-    await deleteDoc(doc(db, 'discountCodes', id))
+    await deleteDoc(doc(getDb(), 'discountCodes', id))
     setDiscounts((prev) => prev.filter((d) => d.id !== id))
   }
 

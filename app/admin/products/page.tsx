@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { getDocs, collection, deleteDoc, doc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import { ProductDoc } from '@/types'
 import Button from '@/components/ui/Button'
 
@@ -12,7 +12,7 @@ export default function AdminProductsPage() {
   const [loading, setLoading] = useState(true)
 
   async function fetchProducts() {
-    const snap = await getDocs(collection(db, 'products'))
+    const snap = await getDocs(collection(getDb(), 'products'))
     setProducts(snap.docs.map((d) => ({ id: d.id, ...d.data() } as ProductDoc)))
     setLoading(false)
   }
@@ -21,7 +21,7 @@ export default function AdminProductsPage() {
 
   async function handleDelete(id: string, name: string) {
     if (!confirm(`Delete "${name}"?`)) return
-    await deleteDoc(doc(db, 'products', id))
+    await deleteDoc(doc(getDb(), 'products', id))
     setProducts((prev) => prev.filter((p) => p.id !== id))
   }
 

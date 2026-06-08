@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { getDocs, collection, updateDoc, doc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import { UserDoc } from '@/types'
 
 export default function AdminUsersPage() {
@@ -12,14 +12,14 @@ export default function AdminUsersPage() {
   const [filter, setFilter] = useState('all')
 
   useEffect(() => {
-    getDocs(collection(db, 'users')).then((snap) => {
+    getDocs(collection(getDb(), 'users')).then((snap) => {
       setUsers(snap.docs.map((d) => ({ ...d.data() } as UserDoc)))
       setLoading(false)
     })
   }, [])
 
   async function approveUser(uid: string) {
-    await updateDoc(doc(db, 'users', uid), { approved: true })
+    await updateDoc(doc(getDb(), 'users', uid), { approved: true })
     setUsers((prev) => prev.map((u) => u.uid === uid ? { ...u, approved: true } : u))
   }
 

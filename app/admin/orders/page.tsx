@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
 import { getDocs, collection, query, orderBy } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import { OrderDoc } from '@/types'
 
 const STATUS_COLORS: Record<string, string> = {
@@ -25,7 +25,7 @@ export default function AdminOrdersPage() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) return
-      const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'))
+      const q = query(collection(getDb(), 'orders'), orderBy('createdAt', 'desc'))
       const snap = await getDocs(q)
       setOrders(snap.docs.map((d) => ({ id: d.id, ...d.data() } as OrderDoc)))
       setLoading(false)

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { getDoc, doc, updateDoc, collection, query, where, orderBy, getDocs } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import { UserDoc, UserRole, OrderDoc } from '@/types'
 import Button from '@/components/ui/Button'
 import Link from 'next/link'
@@ -20,7 +20,7 @@ export default function AdminUserDetailPage() {
 
   useEffect(() => {
     async function load() {
-      const userSnap = await getDoc(doc(db, 'users', userId))
+      const userSnap = await getDoc(doc(getDb(), 'users', userId))
       if (!userSnap.exists()) { router.push('/admin/users'); return }
       const userData = userSnap.data() as UserDoc
       setUser(userData)
@@ -28,7 +28,7 @@ export default function AdminUserDetailPage() {
       setCustomPrice(userData.customPriceOverride ? (userData.customPriceOverride / 100).toFixed(2) : '')
 
       const q = query(
-        collection(db, 'orders'),
+        collection(getDb(), 'orders'),
         where('userId', '==', userId),
         orderBy('createdAt', 'desc')
       )
@@ -49,7 +49,7 @@ export default function AdminUserDetailPage() {
       } else {
         updates.customPriceOverride = undefined
       }
-      await updateDoc(doc(db, 'users', userId), updates as Record<string, unknown>)
+      await updateDoc(doc(getDb(), 'users', userId), updates as Record<string, unknown>)
       setUser((u) => u ? { ...u, ...updates } : u)
     } finally {
       setSaving(false)
@@ -57,7 +57,7 @@ export default function AdminUserDetailPage() {
   }
 
   async function handleApprove() {
-    await updateDoc(doc(db, 'users', userId), { approved: true })
+    await updateDoc(doc(getDb(), 'users', userId), { approved: true })
     setUser((u) => u ? { ...u, approved: true } : u)
   }
 

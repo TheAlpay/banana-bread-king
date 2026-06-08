@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import { OrderDoc, OrderStatus } from '@/types'
 import Button from '@/components/ui/Button'
 
@@ -21,7 +21,7 @@ export default function AdminOrderDetailPage() {
   const [emailLoading, setEmailLoading] = useState(false)
 
   useEffect(() => {
-    getDoc(doc(db, 'orders', orderId)).then((snap) => {
+    getDoc(doc(getDb(), 'orders', orderId)).then((snap) => {
       if (snap.exists()) setOrder({ id: snap.id, ...snap.data() } as OrderDoc)
       setLoading(false)
     })
@@ -29,13 +29,13 @@ export default function AdminOrderDetailPage() {
 
   async function updateStatus(status: OrderStatus) {
     setStatusUpdating(true)
-    await updateDoc(doc(db, 'orders', orderId), { status, updatedAt: new Date().toISOString() })
+    await updateDoc(doc(getDb(), 'orders', orderId), { status, updatedAt: new Date().toISOString() })
     setOrder((o) => o ? { ...o, status } : o)
     setStatusUpdating(false)
   }
 
   async function saveNotes() {
-    await updateDoc(doc(db, 'orders', orderId), { adminNotes: notes })
+    await updateDoc(doc(getDb(), 'orders', orderId), { adminNotes: notes })
   }
 
   async function generateInvoice() {

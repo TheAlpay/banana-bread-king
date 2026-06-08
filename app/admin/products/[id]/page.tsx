@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { getDoc, doc, updateDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import { ProductDoc, Range, Variety } from '@/types'
 import Button from '@/components/ui/Button'
 
@@ -26,7 +26,7 @@ export default function EditProductPage() {
   })
 
   useEffect(() => {
-    getDoc(doc(db, 'products', id)).then((snap) => {
+    getDoc(doc(getDb(), 'products', id)).then((snap) => {
       if (!snap.exists()) { router.push('/admin/products'); return }
       const p = snap.data() as ProductDoc
       setForm({
@@ -57,7 +57,7 @@ export default function EditProductPage() {
     if (!form.varieties.length) { alert('Select at least one variety'); return }
     setSaving(true)
     try {
-      await updateDoc(doc(db, 'products', id), {
+      await updateDoc(doc(getDb(), 'products', id), {
         name: form.name,
         slug: form.slug,
         range: form.range,
