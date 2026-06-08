@@ -3,7 +3,26 @@
     "allow": [
       "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias=\"@/*\" --yes)",
       "Bash(Rename-Item -Path \"claude.md\" -NewName \"claude.md.bak\")",
-      "Bash(Rename-Item -Path \"claude.md.bak\" -NewName \"claude.md\")"
+      "Bash(Rename-Item -Path \"claude.md.bak\" -NewName \"claude.md\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\alpay\\\\bananbread-king\\\\app\\\\admin\\\\analytics\")",
+      "Bash(Out-Null)",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\alpay\\\\bananbread-king\\\\app\\\\admin\\\\invoices\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\alpay\\\\bananbread-king\\\\app\\\\admin\\\\products\\\\new\")",
+      "Bash(Write-Output \"Directories created.\")",
+      "PowerShell(New-Item *)",
+      "PowerShell(cd \"C:\\\\Users\\\\alpay\\\\bananbread-king\"; $proc = Start-Process -FilePath \"npm\" -ArgumentList \"run\",\"dev\" -PassThru -RedirectStandardOutput \"C:\\\\Temp\\\\devserver.log\" -RedirectStandardError \"C:\\\\Temp\\\\devserver.err\" -WindowStyle Hidden; Start-Sleep 6; Get-Content \"C:\\\\Temp\\\\devserver.log\" -ErrorAction SilentlyContinue; Get-Content \"C:\\\\Temp\\\\devserver.err\" -ErrorAction SilentlyContinue; $proc.Id)",
+      "PowerShell(cd \"C:\\\\Users\\\\alpay\\\\bananbread-king\"; npx next build 2>&1 | Where-Object { $_ -match \"error|warning|Error|Warning\" } | Select-Object -First 20)",
+      "Bash(mkdir -p /tmp/bbk)",
+      "Bash(npm run *)",
+      "Bash(echo \"PID: $!\")",
+      "PowerShell(taskkill *)",
+      "Bash(kill 1534)",
+      "Read(//tmp/bbk/**)",
+      "Bash(npx tsc *)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)"
     ]
   }
 }

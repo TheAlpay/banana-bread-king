@@ -33,6 +33,12 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# Firebase service account key — never commit this
+*firebase-adminsdk*.json
+
+# Claude Code local settings
+.claude/settings.local.json
+
 # vercel
 .vercel
 

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#f5e6d3"/>
+  <!-- Loaf body -->
+  <rect x="160" y="320" width="480" height="260" rx="30" fill="#c8843a"/>
+  <!-- Loaf dome top -->
+  <ellipse cx="400" cy="320" rx="240" ry="80" fill="#d4903e"/>
+  <!-- Highlight on dome -->
+  <ellipse cx="360" cy="295" rx="120" ry="35" fill="#e8a84e" opacity="0.5"/>
+  <!-- Bread texture lines -->
+  <line x1="220" y1="380" x2="580" y2="380" stroke="#b87530" stroke-width="2" opacity="0.4"/>
+  <line x1="220" y1="410" x2="580" y2="410" stroke="#b87530" stroke-width="2" opacity="0.3"/>
+  <line x1="220" y1="440" x2="580" y2="440" stroke="#b87530" stroke-width="2" opacity="0.3"/>
+  <!-- Crust edge -->
+  <rect x="160" y="555" width="480" height="25" rx="12" fill="#a06020" opacity="0.6"/>
+  <!-- Banana decoration -->
+  <path d="M340 240 Q360 200 400 210 Q440 200 460 240" stroke="#f5c842" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- Shadow -->
+  <ellipse cx="400" cy="590" rx="220" ry="18" fill="#8B4513" opacity="0.15"/>
+</svg>
