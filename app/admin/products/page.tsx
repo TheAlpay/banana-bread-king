@@ -28,45 +28,45 @@ export default function AdminProductsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-playfair text-3xl font-bold text-[#8B4513]">Products</h1>
+        <h1 className="font-playfair text-3xl font-bold text-[#5C2B0F]">Products</h1>
         <Link href="/admin/products/new">
           <Button>+ Add Product</Button>
         </Link>
       </div>
 
       {loading ? (
-        <div className="text-center py-16 text-gray-400">Loading...</div>
+        <div className="text-center py-16 text-[#B89878]">Loading...</div>
       ) : (
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#fdf8f0] text-left">
+                <tr className="bg-[#FAF6EF] text-left">
                   {['Name', 'Range', 'Price', 'Varieties', 'Stock', 'Actions'].map((h) => (
-                    <th key={h} className="px-4 py-3 font-medium text-gray-600">{h}</th>
+                    <th key={h} className="px-4 py-3 font-medium text-[#7A5A42]">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {products.map((p) => (
-                  <tr key={p.id} className="hover:bg-[#fdf8f0] transition-colors">
-                    <td className="px-4 py-3 font-medium text-gray-900">{p.name}</td>
+                  <tr key={p.id} className="hover:bg-[#FAF6EF] transition-colors">
+                    <td className="px-4 py-3 font-medium text-[#1C0A00]">{p.name}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                        p.range === 'classic' ? 'bg-[#f5e6d3] text-[#8B4513]' : 'bg-green-100 text-green-700'
+                        p.range === 'classic' ? 'bg-[#F5EAD8] text-[#5C2B0F]' : 'bg-green-100 text-green-700'
                       }`}>
                         {p.range === 'classic' ? 'Classic' : 'GF & Vegan'}
                       </span>
                     </td>
                     <td className="px-4 py-3">${(p.basePrice / 100).toFixed(2)}</td>
-                    <td className="px-4 py-3 text-gray-500">{p.varieties.join(', ')}</td>
+                    <td className="px-4 py-3 text-[#A08060]">{p.varieties.join(', ')}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${p.inStock ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                         {p.inStock ? 'In Stock' : 'Out of Stock'}
                       </span>
                     </td>
                     <td className="px-4 py-3 flex gap-2">
-                      <Link href={`/admin/products/${p.id}`} className="text-[#8B4513] hover:underline text-xs font-medium">
+                      <Link href={`/admin/products/${p.id}`} className="text-[#5C2B0F] hover:underline text-xs font-medium">
                         Edit
                       </Link>
                       <button

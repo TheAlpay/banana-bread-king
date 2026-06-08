@@ -7,7 +7,7 @@ import Link from 'next/link'
 export default function AdminDashboardPage() {
   return (
     <div>
-      <h1 className="font-playfair text-3xl font-bold text-[#8B4513] mb-8">Dashboard</h1>
+      <h1 className="font-playfair text-3xl font-bold text-[#5C2B0F] mb-8">Dashboard</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {[
@@ -42,7 +42,7 @@ export default function AdminDashboardPage() {
             <Link
               key={href}
               href={href}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-100 hover:bg-[#fdf8f0] hover:border-[#8B4513]/20 transition-colors text-center"
+              className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-100 hover:bg-[#FAF6EF] hover:border-[#5C2B0F]/20 transition-colors text-center"
             >
               <span className="text-2xl">{icon}</span>
               <span className="text-xs font-medium text-gray-600">{label}</span>

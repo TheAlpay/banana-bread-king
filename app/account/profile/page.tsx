@@ -83,7 +83,7 @@ export default function ProfilePage() {
   }
 
   if (loading) {
-    return <div className="max-w-2xl mx-auto px-4 py-16 text-center text-gray-400">Loading...</div>
+    return <div className="max-w-2xl mx-auto px-4 py-16 text-center text-[#B89878]">Loading...</div>
   }
 
   const isWholesale = user?.role === 'wholesale'
@@ -92,13 +92,13 @@ export default function ProfilePage() {
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <Link href="/account" className="text-sm text-gray-400 hover:text-[#8B4513] flex items-center gap-1 mb-2">
+          <Link href="/account" className="text-sm text-[#B89878] hover:text-[#5C2B0F] flex items-center gap-1 mb-2">
             ← My Account
           </Link>
-          <h1 className="font-playfair text-3xl font-bold text-[#8B4513]">Edit Profile</h1>
+          <h1 className="font-playfair text-3xl font-bold text-[#5C2B0F]">Edit Profile</h1>
         </div>
         {isWholesale && (
-          <span className="inline-flex items-center gap-1 bg-[#8B4513] text-[#fdf8f0] text-xs px-3 py-1 rounded-full font-medium">
+          <span className="inline-flex items-center gap-1 bg-[#5C2B0F] text-[#FAF6EF] text-xs px-3 py-1 rounded-full font-medium">
             Wholesale Account
           </span>
         )}
@@ -107,27 +107,27 @@ export default function ProfilePage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Personal Info */}
         <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="font-semibold text-gray-900 mb-4">Personal Information</h2>
+          <h2 className="font-semibold text-[#1C0A00] mb-4">Personal Information</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              <label className="block text-sm font-medium text-[#3D1A08] mb-1">Full Name</label>
               <input
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                 required
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30 focus:border-[#5C2B0F]"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-[#3D1A08] mb-1">Email</label>
               <input
                 type="email"
                 value={user?.email || ''}
                 disabled
-                className="w-full border border-gray-100 rounded-xl px-4 py-2.5 text-sm bg-gray-50 text-gray-400 cursor-not-allowed"
+                className="w-full border border-[#F2E4CE] rounded-xl px-4 py-2.5 text-sm bg-[#FAF6EF] text-[#B89878] cursor-not-allowed"
               />
-              <p className="text-xs text-gray-400 mt-1">Email cannot be changed here.</p>
+              <p className="text-xs text-[#B89878] mt-1">Email cannot be changed here.</p>
             </div>
           </div>
         </div>
@@ -135,25 +135,25 @@ export default function ProfilePage() {
         {/* Business Info — only for wholesale */}
         {isWholesale && (
           <div className="bg-white rounded-2xl shadow-sm p-6">
-            <h2 className="font-semibold text-gray-900 mb-4">Business Details</h2>
+            <h2 className="font-semibold text-[#1C0A00] mb-4">Business Details</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                <label className="block text-sm font-medium text-[#3D1A08] mb-1">Company Name</label>
                 <input
                   type="text"
                   value={form.company}
                   onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                  className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30 focus:border-[#5C2B0F]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">ABN</label>
+                <label className="block text-sm font-medium text-[#3D1A08] mb-1">ABN</label>
                 <input
                   type="text"
                   value={form.abn}
                   onChange={(e) => setForm((f) => ({ ...f, abn: e.target.value }))}
                   placeholder="12 345 678 901"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                  className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30 focus:border-[#5C2B0F]"
                 />
               </div>
             </div>
@@ -162,45 +162,45 @@ export default function ProfilePage() {
 
         {/* Shipping Address */}
         <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="font-semibold text-gray-900 mb-4">Shipping Address</h2>
+          <h2 className="font-semibold text-[#1C0A00] mb-4">Shipping Address</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Address Line 1</label>
+              <label className="block text-sm font-medium text-[#3D1A08] mb-1">Address Line 1</label>
               <input
                 type="text"
                 value={form.line1}
                 onChange={(e) => setForm((f) => ({ ...f, line1: e.target.value }))}
                 placeholder="123 Main Street"
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30 focus:border-[#5C2B0F]"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Address Line 2 (optional)</label>
+              <label className="block text-sm font-medium text-[#3D1A08] mb-1">Address Line 2 (optional)</label>
               <input
                 type="text"
                 value={form.line2}
                 onChange={(e) => setForm((f) => ({ ...f, line2: e.target.value }))}
                 placeholder="Unit, Suite, Apt..."
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30 focus:border-[#5C2B0F]"
               />
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div className="col-span-2 sm:col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">City / Suburb</label>
+                <label className="block text-sm font-medium text-[#3D1A08] mb-1">City / Suburb</label>
                 <input
                   type="text"
                   value={form.city}
                   onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
                   placeholder="Brisbane"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                  className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30 focus:border-[#5C2B0F]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                <label className="block text-sm font-medium text-[#3D1A08] mb-1">State</label>
                 <select
                   value={form.state}
                   onChange={(e) => setForm((f) => ({ ...f, state: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none"
+                  className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none"
                 >
                   <option value="">Select</option>
                   {['QLD', 'NSW', 'VIC', 'SA', 'WA', 'TAS', 'ACT', 'NT'].map((s) => (
@@ -209,14 +209,14 @@ export default function ProfilePage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Postcode</label>
+                <label className="block text-sm font-medium text-[#3D1A08] mb-1">Postcode</label>
                 <input
                   type="text"
                   value={form.postcode}
                   onChange={(e) => setForm((f) => ({ ...f, postcode: e.target.value }))}
                   placeholder="4000"
                   maxLength={4}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                  className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30 focus:border-[#5C2B0F]"
                 />
               </div>
             </div>

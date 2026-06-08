@@ -45,8 +45,8 @@ export default function FavoritesPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="font-playfair text-3xl font-bold text-[#8B4513]">My Favourites</h1>
-        <Link href="/account" className="text-sm text-[#8B4513] hover:underline">← Dashboard</Link>
+        <h1 className="font-playfair text-3xl font-bold text-[#5C2B0F]">My Favourites</h1>
+        <Link href="/account" className="text-sm text-[#5C2B0F] hover:underline">← Dashboard</Link>
       </div>
 
       {loading ? (
@@ -55,7 +55,7 @@ export default function FavoritesPage() {
         <div className="text-center py-16 text-gray-400">
           <p className="text-4xl mb-4">❤️</p>
           <p>No favourites yet.</p>
-          <Link href="/products" className="inline-block mt-4 text-[#8B4513] hover:underline text-sm">Browse products</Link>
+          <Link href="/products" className="inline-block mt-4 text-[#5C2B0F] hover:underline text-sm">Browse products</Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

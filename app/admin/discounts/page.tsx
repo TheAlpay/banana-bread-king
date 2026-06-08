@@ -68,13 +68,13 @@ export default function AdminDiscountsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-playfair text-3xl font-bold text-[#8B4513]">Discounts</h1>
+        <h1 className="font-playfair text-3xl font-bold text-[#5C2B0F]">Discounts</h1>
         <Button onClick={() => setShowForm(!showForm)}>+ Create Code</Button>
       </div>
 
       {showForm && (
         <form onSubmit={handleCreate} className="bg-white rounded-2xl shadow-sm p-6 mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <h2 className="font-semibold text-gray-900 col-span-full">New Discount Code</h2>
+          <h2 className="font-semibold text-[#1C0A00] col-span-full">New Discount Code</h2>
           {[
             { label: 'Code', key: 'code', placeholder: 'WELCOME10', required: true },
             { label: 'Value', key: 'value', placeholder: form.type === 'percentage' ? '10' : '5.00', required: true },
@@ -83,23 +83,23 @@ export default function AdminDiscountsPage() {
             { label: 'Expires', key: 'expiresAt', placeholder: '', required: false, type: 'date' },
           ].map(({ label, key, placeholder, required, type }) => (
             <div key={key}>
-              <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+              <label className="block text-xs font-medium text-[#7A5A42] mb-1">{label}</label>
               <input
                 type={type || 'text'}
                 value={form[key as keyof typeof form] as string}
                 onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
                 required={required}
                 placeholder={placeholder}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                className="w-full border border-[#E8D5B8] rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30 focus:border-[#5C2B0F]"
               />
             </div>
           ))}
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Type</label>
+            <label className="block text-xs font-medium text-[#7A5A42] mb-1">Type</label>
             <select
               value={form.type}
               onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as 'percentage' | 'fixed' }))}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none"
+              className="w-full border border-[#E8D5B8] rounded-xl px-3 py-2 text-sm focus:outline-none"
             >
               <option value="percentage">Percentage (%)</option>
               <option value="fixed">Fixed Amount ($)</option>
@@ -116,36 +116,36 @@ export default function AdminDiscountsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#fdf8f0] text-left">
+              <tr className="bg-[#FAF6EF] text-left">
                 {['Code', 'Type', 'Value', 'Min Order', 'Uses', 'Status', 'Expires', 'Actions'].map((h) => (
-                  <th key={h} className="px-4 py-3 font-medium text-gray-600 whitespace-nowrap">{h}</th>
+                  <th key={h} className="px-4 py-3 font-medium text-[#7A5A42] whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {discounts.map((d) => (
-                <tr key={d.id} className="hover:bg-[#fdf8f0] transition-colors">
-                  <td className="px-4 py-3 font-mono font-semibold text-[#8B4513]">{d.code}</td>
-                  <td className="px-4 py-3 capitalize text-gray-500">{d.type}</td>
+                <tr key={d.id} className="hover:bg-[#FAF6EF] transition-colors">
+                  <td className="px-4 py-3 font-mono font-semibold text-[#5C2B0F]">{d.code}</td>
+                  <td className="px-4 py-3 capitalize text-[#A08060]">{d.type}</td>
                   <td className="px-4 py-3 font-medium">
                     {d.type === 'percentage' ? `${d.value}%` : `$${(d.value / 100).toFixed(2)}`}
                   </td>
-                  <td className="px-4 py-3 text-gray-500">
+                  <td className="px-4 py-3 text-[#A08060]">
                     {d.minOrderAmount ? `$${(d.minOrderAmount / 100).toFixed(2)}` : '—'}
                   </td>
-                  <td className="px-4 py-3 text-gray-500">
+                  <td className="px-4 py-3 text-[#A08060]">
                     {d.usedCount}{d.maxUses ? `/${d.maxUses}` : ''}
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${d.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${d.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-[#A08060]'}`}>
                       {d.active ? 'Active' : 'Inactive'}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-400">
+                  <td className="px-4 py-3 text-[#B89878]">
                     {d.expiresAt ? new Date(d.expiresAt).toLocaleDateString('en-AU') : '—'}
                   </td>
                   <td className="px-4 py-3 flex gap-3">
-                    <button onClick={() => toggleActive(d.id, d.active)} className="text-[#8B4513] hover:underline text-xs font-medium">
+                    <button onClick={() => toggleActive(d.id, d.active)} className="text-[#5C2B0F] hover:underline text-xs font-medium">
                       {d.active ? 'Deactivate' : 'Activate'}
                     </button>
                     <button onClick={() => handleDelete(d.id)} className="text-red-400 hover:underline text-xs font-medium">
@@ -155,7 +155,7 @@ export default function AdminDiscountsPage() {
                 </tr>
               ))}
               {discounts.length === 0 && (
-                <tr><td colSpan={8} className="px-4 py-10 text-center text-gray-400">No discount codes yet.</td></tr>
+                <tr><td colSpan={8} className="px-4 py-10 text-center text-[#B89878]">No discount codes yet.</td></tr>
               )}
             </tbody>
           </table>

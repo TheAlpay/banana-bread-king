@@ -37,7 +37,7 @@ export default function AdminOrdersPage() {
 
   return (
     <div>
-      <h1 className="font-playfair text-3xl font-bold text-[#8B4513] mb-6">Orders</h1>
+      <h1 className="font-playfair text-3xl font-bold text-[#5C2B0F] mb-6">Orders</h1>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -46,7 +46,7 @@ export default function AdminOrdersPage() {
             key={s}
             onClick={() => setFilter(s)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium capitalize transition-colors ${
-              filter === s ? 'bg-[#8B4513] text-[#fdf8f0]' : 'bg-white text-gray-600 hover:bg-[#f5e6d3]'
+              filter === s ? 'bg-[#5C2B0F] text-[#FAF6EF]' : 'bg-white text-[#7A5A42] hover:bg-[#F5EAD8]'
             }`}
           >
             {s}
@@ -55,36 +55,36 @@ export default function AdminOrdersPage() {
       </div>
 
       {loading ? (
-        <div className="text-center py-16 text-gray-400">Loading...</div>
+        <div className="text-center py-16 text-[#B89878]">Loading...</div>
       ) : (
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#fdf8f0] text-left">
+                <tr className="bg-[#FAF6EF] text-left">
                   {['Order #', 'Date', 'Customer', 'Company', 'Items', 'Total', 'Status', 'Actions'].map((h) => (
-                    <th key={h} className="px-4 py-3 font-medium text-gray-600 whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 font-medium text-[#7A5A42] whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {filtered.map((order) => (
-                  <tr key={order.id} className="hover:bg-[#fdf8f0] transition-colors">
-                    <td className="px-4 py-3 font-medium text-[#8B4513]">{order.invoiceNumber}</td>
-                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
+                  <tr key={order.id} className="hover:bg-[#FAF6EF] transition-colors">
+                    <td className="px-4 py-3 font-medium text-[#5C2B0F]">{order.invoiceNumber}</td>
+                    <td className="px-4 py-3 text-[#A08060] whitespace-nowrap">
                       {new Date(order.createdAt).toLocaleDateString('en-AU')}
                     </td>
                     <td className="px-4 py-3">{order.userName}</td>
-                    <td className="px-4 py-3 text-gray-400">{order.userCompany || '—'}</td>
-                    <td className="px-4 py-3 text-gray-600">{order.items.reduce((s, i) => s + i.quantity, 0)}</td>
+                    <td className="px-4 py-3 text-[#B89878]">{order.userCompany || '—'}</td>
+                    <td className="px-4 py-3 text-[#7A5A42]">{order.items.reduce((s, i) => s + i.quantity, 0)}</td>
                     <td className="px-4 py-3 font-semibold">${(order.total / 100).toFixed(2)}</td>
                     <td className="px-4 py-3">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize ${STATUS_COLORS[order.status] ?? 'bg-gray-100 text-gray-600'}`}>
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize ${STATUS_COLORS[order.status] ?? 'bg-gray-100 text-[#7A5A42]'}`}>
                         {order.status}
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <Link href={`/admin/orders/${order.id}`} className="text-[#8B4513] hover:underline text-xs font-medium">
+                      <Link href={`/admin/orders/${order.id}`} className="text-[#5C2B0F] hover:underline text-xs font-medium">
                         View
                       </Link>
                     </td>
@@ -92,7 +92,7 @@ export default function AdminOrdersPage() {
                 ))}
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="px-4 py-10 text-center text-gray-400">No orders found.</td>
+                    <td colSpan={8} className="px-4 py-10 text-center text-[#B89878]">No orders found.</td>
                   </tr>
                 )}
               </tbody>

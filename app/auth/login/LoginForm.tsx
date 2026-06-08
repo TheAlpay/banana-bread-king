@@ -9,7 +9,6 @@ import {
   GoogleAuthProvider,
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
-import Button from '@/components/ui/Button'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -39,7 +38,7 @@ export default function LoginForm() {
       } else if (code === 'auth/too-many-requests') {
         setError('Too many attempts. Please wait a moment and try again.')
       } else if (code === 'auth/operation-not-allowed') {
-        setError('Email/password sign-in is not enabled.')
+        setError('Email/password sign-in is not enabled. Please contact support.')
       } else {
         setError(`Sign-in failed: ${code || 'Unknown error'}`)
       }
@@ -73,21 +72,24 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fdf8f0] flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="font-playfair text-2xl font-bold text-[#8B4513]">
-            🍌 Banana Bread King
+    <div className="min-h-screen bg-[#FAF6EF] flex items-center justify-center px-5">
+      <div className="w-full max-w-[420px]">
+        {/* Logo */}
+        <div className="text-center mb-10">
+          <Link href="/" className="inline-flex items-center gap-2 font-playfair text-2xl font-bold text-[#1C0A00]">
+            <span className="text-[#C6862A]">🍌</span>
+            Banana Bread King
           </Link>
-          <h1 className="text-xl font-semibold text-gray-800 mt-4">Welcome back</h1>
-          <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
+          <h1 className="text-xl font-semibold text-[#1C0A00] mt-5 mb-1">Welcome back</h1>
+          <p className="text-[#A08060] text-sm">Sign in to your account</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm p-8">
+        <div className="bg-white rounded-2xl shadow-[0_2px_16px_rgba(0,0,0,0.07)] p-8">
+          {/* Google */}
           <button
             onClick={handleGoogleLogin}
             disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-xl py-3 text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-60 mb-6"
+            className="w-full flex items-center justify-center gap-3 border-2 border-[#E8D5B8] rounded-xl py-3 text-sm font-semibold text-[#3D1A08] hover:bg-[#FAF6EF] hover:border-[#5C2B0F] transition-all disabled:opacity-60 mb-5"
           >
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -98,33 +100,39 @@ export default function LoginForm() {
             {googleLoading ? 'Signing in...' : 'Continue with Google'}
           </button>
 
-          <div className="relative mb-6">
+          <div className="relative mb-5">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200" />
+              <div className="w-full border-t border-[#F2E4CE]" />
             </div>
-            <div className="relative flex justify-center text-xs text-gray-400 bg-white px-2">or</div>
+            <div className="relative flex justify-center text-xs text-[#B89878] bg-white px-3">or</div>
           </div>
 
           <form onSubmit={handleEmailLogin} className="space-y-4">
             {error && (
-              <div className="bg-red-50 text-red-600 text-sm rounded-lg px-4 py-3">{error}</div>
+              <div className="bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl px-4 py-3">
+                {error}
+              </div>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-[#7A5A42] mb-2">
+                Email
+              </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                className="w-full border-2 border-[#E8D5B8] rounded-xl px-4 py-3 text-sm text-[#1C0A00] placeholder:text-[#C4A882] focus:outline-none focus:border-[#5C2B0F] transition-colors bg-[#FAF6EF]"
                 placeholder="you@example.com"
               />
             </div>
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="block text-sm font-medium text-gray-700">Password</label>
-                <Link href="/auth/forgot-password" className="text-xs text-[#8B4513] hover:underline">
-                  Forgot password?
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-[#7A5A42]">
+                  Password
+                </label>
+                <Link href="/auth/forgot-password" className="text-xs text-[#5C2B0F] hover:underline font-medium">
+                  Forgot?
                 </Link>
               </div>
               <input
@@ -132,19 +140,23 @@ export default function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                className="w-full border-2 border-[#E8D5B8] rounded-xl px-4 py-3 text-sm text-[#1C0A00] placeholder:text-[#C4A882] focus:outline-none focus:border-[#5C2B0F] transition-colors bg-[#FAF6EF]"
                 placeholder="••••••••"
               />
             </div>
-            <Button type="submit" loading={loading} className="w-full" size="lg">
-              Sign In
-            </Button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#5C2B0F] text-[#FAF6EF] py-3.5 rounded-xl font-semibold text-sm hover:bg-[#3D1A08] transition-colors disabled:opacity-60 shadow-sm"
+            >
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
           </form>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-[#A08060] mt-6">
           {"Don't have an account? "}
-          <Link href="/auth/register" className="text-[#8B4513] font-medium hover:underline">
+          <Link href="/auth/register" className="text-[#5C2B0F] font-semibold hover:underline">
             Create one
           </Link>
         </p>

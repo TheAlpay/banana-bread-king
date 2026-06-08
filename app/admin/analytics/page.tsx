@@ -9,7 +9,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts'
 
-const COLORS = ['#8B4513', '#c47a45', '#f5e6d3', '#3d7a47', '#68a87a', '#a8d4b3']
+const COLORS = ['#5C2B0F', '#c47a45', '#F5EAD8', '#3d7a47', '#68a87a', '#a8d4b3']
 
 export default function AdminAnalyticsPage() {
   const [orders, setOrders] = useState<OrderDoc[]>([])
@@ -76,7 +76,7 @@ export default function AdminAnalyticsPage() {
 
   return (
     <div>
-      <h1 className="font-playfair text-3xl font-bold text-[#8B4513] mb-8">Analytics</h1>
+      <h1 className="font-playfair text-3xl font-bold text-[#5C2B0F] mb-8">Analytics</h1>
 
       {/* Revenue chart */}
       <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
@@ -87,7 +87,7 @@ export default function AdminAnalyticsPage() {
               <button
                 key={p}
                 onClick={() => setPeriod(p)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium capitalize ${period === p ? 'bg-[#8B4513] text-[#fdf8f0]' : 'bg-[#f5e6d3] text-[#8B4513]'}`}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium capitalize ${period === p ? 'bg-[#5C2B0F] text-[#FAF6EF]' : 'bg-[#F5EAD8] text-[#5C2B0F]'}`}
               >
                 {p}
               </button>
@@ -100,7 +100,7 @@ export default function AdminAnalyticsPage() {
             <XAxis dataKey="date" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
             <Tooltip formatter={(v) => [`$${Number(v).toFixed(2)}`, 'Revenue']} />
-            <Line type="monotone" dataKey="revenue" stroke="#8B4513" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="revenue" stroke="#5C2B0F" strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -143,7 +143,7 @@ export default function AdminAnalyticsPage() {
             <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
             <YAxis type="category" dataKey="name" width={180} tick={{ fontSize: 11 }} />
             <Tooltip formatter={(v) => `$${Number(v).toFixed(2)}`} />
-            <Bar dataKey="revenue" fill="#8B4513" radius={[0, 4, 4, 0]} />
+            <Bar dataKey="revenue" fill="#5C2B0F" radius={[0, 4, 4, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

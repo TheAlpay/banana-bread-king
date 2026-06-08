@@ -53,43 +53,43 @@ export default function AdminInvoicesPage() {
 
   return (
     <div>
-      <h1 className="font-playfair text-3xl font-bold text-[#8B4513] mb-6">Invoices</h1>
+      <h1 className="font-playfair text-3xl font-bold text-[#5C2B0F] mb-6">Invoices</h1>
 
       {loading ? (
-        <div className="text-center py-16 text-gray-400">Loading...</div>
+        <div className="text-center py-16 text-[#B89878]">Loading...</div>
       ) : (
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#fdf8f0] text-left">
+                <tr className="bg-[#FAF6EF] text-left">
                   {['Invoice #', 'Order', 'Customer', 'Amount', 'Date', 'PDF', 'Actions'].map((h) => (
-                    <th key={h} className="px-4 py-3 font-medium text-gray-600 whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 font-medium text-[#7A5A42] whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {orders.map((order) => (
-                  <tr key={order.id} className="hover:bg-[#fdf8f0] transition-colors">
-                    <td className="px-4 py-3 font-mono font-semibold text-[#8B4513]">{order.invoiceNumber}</td>
-                    <td className="px-4 py-3 text-gray-500">{order.id.slice(0, 8)}…</td>
+                  <tr key={order.id} className="hover:bg-[#FAF6EF] transition-colors">
+                    <td className="px-4 py-3 font-mono font-semibold text-[#5C2B0F]">{order.invoiceNumber}</td>
+                    <td className="px-4 py-3 text-[#A08060]">{order.id.slice(0, 8)}…</td>
                     <td className="px-4 py-3">{order.userName}</td>
                     <td className="px-4 py-3 font-semibold">${(order.total / 100).toFixed(2)}</td>
-                    <td className="px-4 py-3 text-gray-400 whitespace-nowrap">
+                    <td className="px-4 py-3 text-[#B89878] whitespace-nowrap">
                       {new Date(order.createdAt).toLocaleDateString('en-AU')}
                     </td>
                     <td className="px-4 py-3">
                       {order.invoiceUrl ? (
-                        <a href={order.invoiceUrl} target="_blank" rel="noopener noreferrer" className="text-[#8B4513] hover:underline text-xs">
+                        <a href={order.invoiceUrl} target="_blank" rel="noopener noreferrer" className="text-[#5C2B0F] hover:underline text-xs">
                           View PDF
                         </a>
-                      ) : <span className="text-gray-300 text-xs">Not generated</span>}
+                      ) : <span className="text-[#D0B898] text-xs">Not generated</span>}
                     </td>
                     <td className="px-4 py-3 flex gap-2">
                       <button
                         onClick={() => regenerate(order.id)}
                         disabled={actionLoading === order.id}
-                        className="text-[#8B4513] hover:underline text-xs font-medium disabled:opacity-50"
+                        className="text-[#5C2B0F] hover:underline text-xs font-medium disabled:opacity-50"
                       >
                         {actionLoading === order.id ? '...' : 'Regenerate'}
                       </button>
@@ -106,7 +106,7 @@ export default function AdminInvoicesPage() {
                   </tr>
                 ))}
                 {orders.length === 0 && (
-                  <tr><td colSpan={7} className="px-4 py-10 text-center text-gray-400">No invoices yet.</td></tr>
+                  <tr><td colSpan={7} className="px-4 py-10 text-center text-[#B89878]">No invoices yet.</td></tr>
                 )}
               </tbody>
             </table>

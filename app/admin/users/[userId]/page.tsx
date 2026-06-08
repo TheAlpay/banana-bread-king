@@ -62,7 +62,7 @@ export default function AdminUserDetailPage() {
   }
 
   if (loading) {
-    return <div className="py-16 text-center text-gray-400">Loading...</div>
+    return <div className="py-16 text-center text-[#B89878]">Loading...</div>
   }
   if (!user) return null
 
@@ -72,11 +72,11 @@ export default function AdminUserDetailPage() {
     <div className="max-w-4xl">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <button onClick={() => router.back()} className="text-sm text-gray-400 hover:text-[#8B4513] mb-2 flex items-center gap-1">
+          <button onClick={() => router.back()} className="text-sm text-[#B89878] hover:text-[#5C2B0F] mb-2 flex items-center gap-1">
             ← Back to Users
           </button>
-          <h1 className="font-playfair text-3xl font-bold text-[#8B4513]">{user.name}</h1>
-          <p className="text-gray-500 text-sm mt-1">{user.email}</p>
+          <h1 className="font-playfair text-3xl font-bold text-[#5C2B0F]">{user.name}</h1>
+          <p className="text-[#A08060] text-sm mt-1">{user.email}</p>
         </div>
         {user.role === 'wholesale' && !user.approved && (
           <Button onClick={handleApprove} className="bg-green-600 hover:bg-green-700">
@@ -92,8 +92,8 @@ export default function AdminUserDetailPage() {
           { label: 'Member Since', value: new Date(user.createdAt).toLocaleDateString('en-AU') },
         ].map(({ label, value }) => (
           <div key={label} className="bg-white rounded-2xl p-5 shadow-sm text-center">
-            <p className="text-xl font-bold text-[#8B4513]">{value}</p>
-            <p className="text-sm text-gray-500 mt-1">{label}</p>
+            <p className="text-xl font-bold text-[#5C2B0F]">{value}</p>
+            <p className="text-sm text-[#A08060] mt-1">{label}</p>
           </div>
         ))}
       </div>
@@ -101,14 +101,14 @@ export default function AdminUserDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Account Settings */}
         <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="font-semibold text-gray-900 mb-4">Account Settings</h2>
+          <h2 className="font-semibold text-[#1C0A00] mb-4">Account Settings</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+              <label className="block text-sm font-medium text-[#3D1A08] mb-1">Role</label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value as UserRole)}
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30"
+                className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30"
               >
                 <option value="customer">Customer</option>
                 <option value="wholesale">Wholesale</option>
@@ -116,19 +116,19 @@ export default function AdminUserDetailPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#3D1A08] mb-1">
                 Custom Price Override (AUD / loaf)
               </label>
-              <p className="text-xs text-gray-400 mb-2">Overrides base product price for this user. Leave blank to use default pricing.</p>
+              <p className="text-xs text-[#B89878] mb-2">Overrides base product price for this user. Leave blank to use default pricing.</p>
               <div className="flex items-center gap-2">
-                <span className="text-gray-500 text-sm">$</span>
+                <span className="text-[#A08060] text-sm">$</span>
                 <input
                   type="number"
                   step="0.01"
                   value={customPrice}
                   onChange={(e) => setCustomPrice(e.target.value)}
                   placeholder="e.g. 9.50"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30"
+                  className="w-full border border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#5C2B0F]/30"
                 />
               </div>
             </div>
@@ -140,14 +140,14 @@ export default function AdminUserDetailPage() {
 
         {/* User Info */}
         <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="font-semibold text-gray-900 mb-4">User Details</h2>
+          <h2 className="font-semibold text-[#1C0A00] mb-4">User Details</h2>
           <dl className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <dt className="text-gray-500">Status</dt>
+              <dt className="text-[#A08060]">Status</dt>
               <dd>
                 <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
                   user.role === 'wholesale' && !user.approved ? 'bg-orange-100 text-orange-700' :
-                  user.approved ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                  user.approved ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-[#7A5A42]'
                 }`}>
                   {user.role === 'wholesale' && !user.approved ? 'Pending Approval' : user.approved ? 'Approved' : 'Active'}
                 </span>
@@ -155,19 +155,19 @@ export default function AdminUserDetailPage() {
             </div>
             {user.company && (
               <div className="flex justify-between">
-                <dt className="text-gray-500">Company</dt>
+                <dt className="text-[#A08060]">Company</dt>
                 <dd className="font-medium">{user.company}</dd>
               </div>
             )}
             {user.abn && (
               <div className="flex justify-between">
-                <dt className="text-gray-500">ABN</dt>
+                <dt className="text-[#A08060]">ABN</dt>
                 <dd className="font-medium">{user.abn}</dd>
               </div>
             )}
             {user.shippingAddress && (
               <div className="flex justify-between">
-                <dt className="text-gray-500">Address</dt>
+                <dt className="text-[#A08060]">Address</dt>
                 <dd className="font-medium text-right">
                   {user.shippingAddress.line1},<br />
                   {user.shippingAddress.city} {user.shippingAddress.state} {user.shippingAddress.postcode}
@@ -176,8 +176,8 @@ export default function AdminUserDetailPage() {
             )}
             {user.customPriceOverride && (
               <div className="flex justify-between">
-                <dt className="text-gray-500">Custom Price</dt>
-                <dd className="font-medium text-[#8B4513]">${(user.customPriceOverride / 100).toFixed(2)} / loaf</dd>
+                <dt className="text-[#A08060]">Custom Price</dt>
+                <dd className="font-medium text-[#5C2B0F]">${(user.customPriceOverride / 100).toFixed(2)} / loaf</dd>
               </div>
             )}
           </dl>
@@ -187,29 +187,29 @@ export default function AdminUserDetailPage() {
       {/* Orders */}
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-50">
-          <h2 className="font-semibold text-gray-900">Order History</h2>
+          <h2 className="font-semibold text-[#1C0A00]">Order History</h2>
         </div>
         {orders.length === 0 ? (
-          <p className="text-gray-400 text-sm py-8 text-center">No orders yet.</p>
+          <p className="text-[#B89878] text-sm py-8 text-center">No orders yet.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#fdf8f0] text-left">
+                <tr className="bg-[#FAF6EF] text-left">
                   {['Invoice', 'Date', 'Items', 'Total', 'Status', ''].map((h) => (
-                    <th key={h} className="px-4 py-3 font-medium text-gray-600 whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 font-medium text-[#7A5A42] whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {orders.map((order) => (
-                  <tr key={order.id} className="hover:bg-[#fdf8f0] transition-colors">
-                    <td className="px-4 py-3 font-mono text-xs text-gray-600">{order.invoiceNumber || '—'}</td>
-                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
+                  <tr key={order.id} className="hover:bg-[#FAF6EF] transition-colors">
+                    <td className="px-4 py-3 font-mono text-xs text-[#7A5A42]">{order.invoiceNumber || '—'}</td>
+                    <td className="px-4 py-3 text-[#A08060] whitespace-nowrap">
                       {new Date(order.createdAt).toLocaleDateString('en-AU')}
                     </td>
-                    <td className="px-4 py-3 text-gray-500">{order.items.reduce((s, i) => s + i.quantity, 0)}</td>
-                    <td className="px-4 py-3 font-semibold text-[#8B4513]">${(order.total / 100).toFixed(2)}</td>
+                    <td className="px-4 py-3 text-[#A08060]">{order.items.reduce((s, i) => s + i.quantity, 0)}</td>
+                    <td className="px-4 py-3 font-semibold text-[#5C2B0F]">${(order.total / 100).toFixed(2)}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize ${
                         order.status === 'delivered' ? 'bg-green-100 text-green-700' :
@@ -220,7 +220,7 @@ export default function AdminUserDetailPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <Link href={`/admin/orders/${order.id}`} className="text-[#8B4513] hover:underline text-xs font-medium">
+                      <Link href={`/admin/orders/${order.id}`} className="text-[#5C2B0F] hover:underline text-xs font-medium">
                         View
                       </Link>
                     </td>

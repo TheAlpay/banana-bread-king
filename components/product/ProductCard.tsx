@@ -20,6 +20,7 @@ export default function ProductCard({ product, userPrice, isFavorite, onToggleFa
   const { addItem, openCart } = useCartStore()
 
   const unitPrice = userPrice ?? product.basePrice
+  const isGF = product.range === 'gluten-free-vegan'
 
   function handleAddToCart() {
     addItem({
@@ -34,62 +35,74 @@ export default function ProductCard({ product, userPrice, isFavorite, onToggleFa
     openCart()
   }
 
-  const isGF = product.range === 'gluten-free-vegan'
-
   return (
-    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden group">
-      <div className="relative">
-        <Link href={`/product/${product.slug}`}>
-          <div className="relative h-52 bg-[#fdf8f0] overflow-hidden">
-            <Image
-              src={product.imageUrl}
-              alt={product.name}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={(e) => {
-                ;(e.target as HTMLImageElement).src = '/images/placeholder.svg'
-              }}
-            />
-          </div>
-        </Link>
+    <div className="bg-white rounded-2xl overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] transition-shadow duration-300 flex flex-col group">
+
+      {/* Image */}
+      <Link href={`/product/${product.slug}`} className="block relative">
+        <div className="relative h-52 bg-[#F5EAD8] overflow-hidden">
+          <Image
+            src={product.imageUrl}
+            alt={product.name}
+            fill
+            className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
+            onError={(e) => {
+              ;(e.target as HTMLImageElement).src = '/images/placeholder.svg'
+            }}
+          />
+          {isGF && (
+            <div className="absolute top-3 left-3">
+              <span className="bg-[#1A5C3A] text-white text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+                GF · VEGAN
+              </span>
+            </div>
+          )}
+          {!product.inStock && (
+            <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
+              <span className="text-xs font-semibold text-[#A08060] bg-white px-3 py-1 rounded-full shadow-sm">
+                Out of Stock
+              </span>
+            </div>
+          )}
+        </div>
+
         {onToggleFavorite && (
           <button
-            onClick={() => onToggleFavorite(product.id)}
-            className="absolute top-3 right-3 bg-white/90 rounded-full p-1.5 hover:scale-110 transition-transform"
+            onClick={(e) => { e.preventDefault(); onToggleFavorite(product.id) }}
+            className="absolute top-3 right-3 bg-white rounded-full p-1.5 shadow-sm hover:scale-110 transition-transform"
             aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >
-            <Heart
-              size={16}
-              className={isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}
-            />
+            <Heart size={15} className={isFavorite ? 'fill-red-500 text-red-500' : 'text-[#D0B898]'} />
           </button>
         )}
-      </div>
+      </Link>
 
-      <div className="p-4">
+      {/* Info */}
+      <div className="p-4 flex flex-col flex-1">
         <Link href={`/product/${product.slug}`}>
-          <h3 className="font-playfair font-semibold text-gray-900 hover:text-[#8B4513] transition-colors mb-2 leading-tight">
+          <h3 className="font-playfair font-semibold text-[#1A0800] hover:text-[#5C2B0F] transition-colors leading-snug mb-2 text-[15px]">
             {product.name}
           </h3>
         </Link>
 
+        {/* Feature badges */}
         <div className="flex flex-wrap gap-1 mb-3">
-          {isGF && <Badge label="Gluten Free" variant="green" />}
           {product.features.slice(0, 2).map((f) => (
             <Badge key={f} label={f} />
           ))}
         </div>
 
+        {/* Variety selector */}
         {product.varieties.length > 1 && (
-          <div className="flex gap-2 mb-3">
+          <div className="flex gap-1.5 mb-4">
             {product.varieties.map((v) => (
               <button
                 key={v}
                 onClick={() => setSelectedVariety(v)}
-                className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+                className={`px-3 py-1 rounded-lg text-[11px] font-semibold border transition-all ${
                   selectedVariety === v
-                    ? 'bg-[#8B4513] text-[#fdf8f0] border-[#8B4513]'
-                    : 'border-[#e8d5c0] text-gray-600 hover:border-[#8B4513]'
+                    ? 'bg-[#5C2B0F] text-[#FAF6EF] border-[#5C2B0F]'
+                    : 'border-[#E5D0B8] text-[#7A5A42] hover:border-[#5C2B0F]'
                 }`}
               >
                 {v}
@@ -98,17 +111,18 @@ export default function ProductCard({ product, userPrice, isFavorite, onToggleFa
           </div>
         )}
 
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-lg font-bold text-[#8B4513]">
+        {/* Price + CTA */}
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#F2E4CE]">
+          <span className="text-lg font-bold text-[#5C2B0F]">
             ${(unitPrice / 100).toFixed(2)}
           </span>
           <button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="flex items-center gap-2 bg-[#8B4513] text-[#fdf8f0] px-3 py-2 rounded-lg text-sm font-medium hover:bg-[#7a3b10] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 bg-[#5C2B0F] text-[#FAF6EF] px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-[#3D1A08] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <ShoppingCart size={14} />
-            {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+            <ShoppingCart size={13} />
+            Add to Cart
           </button>
         </div>
       </div>

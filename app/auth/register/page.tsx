@@ -11,7 +11,6 @@ import {
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
 import { setUser, getUser } from '@/lib/firestore'
-import Button from '@/components/ui/Button'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -108,7 +107,7 @@ export default function RegisterPage() {
       console.error('Register error:', err)
       const code = (err as { code?: string })?.code ?? ''
       const msg = err instanceof Error ? err.message : ''
-      if (code === 'auth/email-already-in-use' || msg.includes('email-already-in-use')) {
+      if (code === 'auth/email-already-in-use') {
         setError('An account with this email already exists.')
       } else if (code === 'auth/weak-password') {
         setError('Password must be at least 6 characters.')
@@ -127,50 +126,57 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fdf8f0] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="font-playfair text-2xl font-bold text-[#8B4513]">
-            🍌 Banana Bread King
+    <div className="min-h-screen bg-[#FAF6EF] flex items-center justify-center px-5 py-14">
+      <div className="w-full max-w-[420px]">
+        {/* Logo */}
+        <div className="text-center mb-10">
+          <Link href="/" className="inline-flex items-center gap-2 font-playfair text-2xl font-bold text-[#1C0A00]">
+            <span className="text-[#C6862A]">🍌</span>
+            Banana Bread King
           </Link>
-          <h1 className="text-xl font-semibold text-gray-800 mt-4">Create an account</h1>
+          <h1 className="text-xl font-semibold text-[#1C0A00] mt-5 mb-1">Create an account</h1>
+          <p className="text-[#A08060] text-sm">Join Brisbane's favourite banana bread bakery</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm p-8">
+        <div className="bg-white rounded-2xl shadow-[0_2px_16px_rgba(0,0,0,0.07)] p-8">
           {error && (
-            <div className="bg-red-50 text-red-600 text-sm rounded-lg px-4 py-3 mb-4">{error}</div>
+            <div className="bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl px-4 py-3 mb-5">
+              {error}
+            </div>
           )}
 
           {/* Wholesale toggle — applies to both Google and email paths */}
-          <div className="mb-5 p-4 bg-[#fdf8f0] rounded-xl border border-[#e8d5c0]">
+          <div className="mb-5 p-4 bg-[#FAF6EF] rounded-xl border-2 border-[#E8D5B8]">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={form.isWholesale}
                 onChange={(e) => update('isWholesale', e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-[#8B4513] focus:ring-[#8B4513]"
+                className="w-4 h-4 rounded border-[#E8D5B8] accent-[#5C2B0F]"
               />
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-semibold text-[#3D1A08]">
                 {"I'm registering as a wholesale customer"}
               </span>
             </label>
             {form.isWholesale && (
               <div className="mt-4 space-y-3">
-                <p className="text-xs text-[#8B4513]">
-                  Wholesale accounts require approval before you can place orders.
+                <p className="text-xs text-[#7A5A42] bg-[#F5EAD8] px-3 py-2 rounded-lg">
+                  Wholesale accounts require approval before placing orders.
                 </p>
                 {[
                   { label: 'Company Name', key: 'company', placeholder: 'Acme Cafe' },
                   { label: 'ABN', key: 'abn', placeholder: '12 345 678 901' },
                 ].map(({ label, key, placeholder }) => (
                   <div key={key}>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+                    <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-[#7A5A42] mb-1.5">
+                      {label}
+                    </label>
                     <input
                       type="text"
                       value={form[key as keyof typeof form] as string}
                       onChange={(e) => update(key, e.target.value)}
                       placeholder={placeholder}
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513] bg-white"
+                      className="w-full border-2 border-[#E8D5B8] rounded-xl px-4 py-2.5 text-sm text-[#1C0A00] placeholder:text-[#C4A882] focus:outline-none focus:border-[#5C2B0F] bg-white transition-colors"
                     />
                   </div>
                 ))}
@@ -183,7 +189,7 @@ export default function RegisterPage() {
             type="button"
             onClick={handleGoogleRegister}
             disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-xl py-3 text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-60 mb-5"
+            className="w-full flex items-center justify-center gap-3 border-2 border-[#E8D5B8] rounded-xl py-3 text-sm font-semibold text-[#3D1A08] hover:bg-[#FAF6EF] hover:border-[#5C2B0F] transition-all disabled:opacity-60 mb-5"
           >
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -196,9 +202,9 @@ export default function RegisterPage() {
 
           <div className="relative mb-5">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200" />
+              <div className="w-full border-t border-[#F2E4CE]" />
             </div>
-            <div className="relative flex justify-center text-xs text-gray-400 bg-white px-2">
+            <div className="relative flex justify-center text-xs text-[#B89878] bg-white px-3">
               or sign up with email
             </div>
           </div>
@@ -206,32 +212,38 @@ export default function RegisterPage() {
           {/* Email form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {[
-              { label: 'Full Name', key: 'name', type: 'text', placeholder: 'Jane Smith', required: true },
-              { label: 'Email', key: 'email', type: 'email', placeholder: 'jane@example.com', required: true },
-              { label: 'Password', key: 'password', type: 'password', placeholder: '••••••••', required: true },
-            ].map(({ label, key, type, placeholder, required }) => (
+              { label: 'Full Name', key: 'name', type: 'text', placeholder: 'Jane Smith' },
+              { label: 'Email', key: 'email', type: 'email', placeholder: 'jane@example.com' },
+              { label: 'Password', key: 'password', type: 'password', placeholder: '••••••••' },
+            ].map(({ label, key, type, placeholder }) => (
               <div key={key}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-[#7A5A42] mb-2">
+                  {label}
+                </label>
                 <input
                   type={type}
                   value={form[key as keyof typeof form] as string}
                   onChange={(e) => update(key, e.target.value)}
-                  required={required}
+                  required
                   placeholder={placeholder}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30 focus:border-[#8B4513]"
+                  className="w-full border-2 border-[#E8D5B8] rounded-xl px-4 py-3 text-sm text-[#1C0A00] placeholder:text-[#C4A882] focus:outline-none focus:border-[#5C2B0F] transition-colors bg-[#FAF6EF]"
                 />
               </div>
             ))}
 
-            <Button type="submit" loading={loading} className="w-full" size="lg">
-              Create Account
-            </Button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#5C2B0F] text-[#FAF6EF] py-3.5 rounded-xl font-semibold text-sm hover:bg-[#3D1A08] transition-colors disabled:opacity-60 shadow-sm"
+            >
+              {loading ? 'Creating account...' : 'Create Account'}
+            </button>
           </form>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-[#A08060] mt-6">
           Already have an account?{' '}
-          <Link href="/auth/login" className="text-[#8B4513] font-medium hover:underline">
+          <Link href="/auth/login" className="text-[#5C2B0F] font-semibold hover:underline">
             Sign in
           </Link>
         </p>
