@@ -3,10 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Heart, ShoppingCart } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import { ProductDoc, Variety } from '@/types'
 import { useCartStore } from '@/store/cartStore'
-import Badge from '@/components/ui/Badge'
 
 interface ProductCardProps {
   product: ProductDoc
@@ -36,30 +35,47 @@ export default function ProductCard({ product, userPrice, isFavorite, onToggleFa
   }
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] transition-shadow duration-300 flex flex-col group">
-
+    <div
+      style={{
+        background: 'linear-gradient(180deg, var(--char-2), var(--char))',
+        border: '1px solid var(--hairline)',
+        borderRadius: '20px',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'transform .5s cubic-bezier(.2,.8,.2,1), border-color .5s, box-shadow .5s',
+      }}
+      onMouseEnter={e => {
+        const el = e.currentTarget as HTMLDivElement
+        el.style.transform = 'translateY(-10px)'
+        el.style.borderColor = 'rgba(245,197,24,.5)'
+        el.style.boxShadow = '0 30px 60px -24px rgba(245,197,24,.35)'
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget as HTMLDivElement
+        el.style.transform = 'none'
+        el.style.borderColor = 'var(--hairline)'
+        el.style.boxShadow = 'none'
+      }}
+    >
       {/* Image */}
-      <Link href={`/product/${product.slug}`} className="block relative">
-        <div className="relative h-52 bg-[#F5EAD8] overflow-hidden">
+      <Link href={`/product/${product.slug}`} style={{ position: 'relative', display: 'block' }}>
+        <div style={{ position: 'relative', aspectRatio: '4/3.4', background: 'linear-gradient(160deg,#3a2210,#1c0e05)' }}>
           <Image
             src={product.imageUrl}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
-            onError={(e) => {
-              ;(e.target as HTMLImageElement).src = '/images/placeholder.svg'
-            }}
+            style={{ objectFit: 'cover' }}
+            onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0' }}
           />
           {isGF && (
-            <div className="absolute top-3 left-3">
-              <span className="bg-[#1A5C3A] text-white text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide">
-                GF · VEGAN
-              </span>
+            <div style={{ position: 'absolute', top: '14px', left: '14px', zIndex: 2 }}>
+              <span className="tag-gf">GF · Vegan</span>
             </div>
           )}
           {!product.inStock && (
-            <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-              <span className="text-xs font-semibold text-[#A08060] bg-white px-3 py-1 rounded-full shadow-sm">
+            <div style={{ position: 'absolute', inset: 0, background: 'rgba(8,6,4,.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', background: 'var(--char)', padding: '6px 14px', borderRadius: '999px', border: '1px solid var(--hairline)' }}>
                 Out of Stock
               </span>
             </div>
@@ -69,41 +85,55 @@ export default function ProductCard({ product, userPrice, isFavorite, onToggleFa
         {onToggleFavorite && (
           <button
             onClick={(e) => { e.preventDefault(); onToggleFavorite(product.id) }}
-            className="absolute top-3 right-3 bg-white rounded-full p-1.5 shadow-sm hover:scale-110 transition-transform"
             aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            style={{
+              position: 'absolute', top: '14px', right: '14px',
+              width: '36px', height: '36px',
+              borderRadius: '50%',
+              background: 'rgba(8,6,4,.7)',
+              border: '1px solid var(--hairline)',
+              display: 'grid', placeItems: 'center',
+              cursor: 'pointer',
+              transition: 'transform .3s',
+            }}
           >
-            <Heart size={15} className={isFavorite ? 'fill-red-500 text-red-500' : 'text-[#D0B898]'} />
+            <Heart size={14} style={{ fill: isFavorite ? 'var(--gold)' : 'none', color: isFavorite ? 'var(--gold)' : 'var(--cream-dim)' }} />
           </button>
         )}
       </Link>
 
-      {/* Info */}
-      <div className="p-4 flex flex-col flex-1">
+      {/* Body */}
+      <div style={{ padding: '22px 22px 26px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Link href={`/product/${product.slug}`}>
-          <h3 className="font-playfair font-semibold text-[#1A0800] hover:text-[#5C2B0F] transition-colors leading-snug mb-2 text-[15px]">
+          <h3 style={{ fontFamily: 'var(--font-anton)', fontSize: '26px', textTransform: 'uppercase', letterSpacing: '.01em', lineHeight: .92, color: 'var(--cream)', marginBottom: '10px' }}>
             {product.name}
           </h3>
         </Link>
 
-        {/* Feature badges */}
-        <div className="flex flex-wrap gap-1 mb-3">
-          {product.features.slice(0, 2).map((f) => (
-            <Badge key={f} label={f} />
-          ))}
-        </div>
+        <p style={{ color: 'var(--muted)', fontSize: '14px', marginBottom: '14px', minHeight: '42px' }}>
+          {product.features.slice(0, 2).join(' · ')}
+        </p>
 
         {/* Variety selector */}
         {product.varieties.length > 1 && (
-          <div className="flex gap-1.5 mb-4">
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '18px', flexWrap: 'wrap' }}>
             {product.varieties.map((v) => (
               <button
                 key={v}
                 onClick={() => setSelectedVariety(v)}
-                className={`px-3 py-1 rounded-lg text-[11px] font-semibold border transition-all ${
-                  selectedVariety === v
-                    ? 'bg-[#5C2B0F] text-[#FAF6EF] border-[#5C2B0F]'
-                    : 'border-[#E5D0B8] text-[#7A5A42] hover:border-[#5C2B0F]'
-                }`}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '12px',
+                  border: `1px solid ${selectedVariety === v ? 'var(--gold)' : 'var(--hairline)'}`,
+                  background: selectedVariety === v ? 'var(--gold)' : 'rgba(255,255,255,.02)',
+                  color: selectedVariety === v ? '#1a1206' : 'var(--cream-dim)',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  letterSpacing: '.06em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  transition: 'all .3s',
+                }}
               >
                 {v}
               </button>
@@ -111,17 +141,31 @@ export default function ProductCard({ product, userPrice, isFavorite, onToggleFa
           </div>
         )}
 
-        {/* Price + CTA */}
-        <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#F2E4CE]">
-          <span className="text-lg font-bold text-[#5C2B0F]">
-            ${(unitPrice / 100).toFixed(2)}
-          </span>
+        {/* Price + Add to Cart */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginTop: 'auto', paddingTop: '18px', borderTop: '1px solid var(--hairline-2)' }}>
+          <div style={{ fontFamily: 'var(--font-playfair)', fontSize: '26px', color: 'var(--gold)' }}>
+            ${(unitPrice / 100).toFixed(2)} <small style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--muted)', letterSpacing: '.05em' }}>/ {selectedVariety}</small>
+          </div>
           <button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="flex items-center gap-1.5 bg-[#5C2B0F] text-[#FAF6EF] px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-[#3D1A08] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{
+              fontSize: '12px',
+              fontWeight: 700,
+              letterSpacing: '.1em',
+              textTransform: 'uppercase',
+              color: '#1a1206',
+              background: 'var(--gold)',
+              padding: '11px 16px',
+              borderRadius: '999px',
+              border: 'none',
+              cursor: product.inStock ? 'pointer' : 'not-allowed',
+              opacity: product.inStock ? 1 : .4,
+              transition: 'background .3s, transform .3s',
+            }}
+            onMouseEnter={e => { if (product.inStock) (e.currentTarget as HTMLButtonElement).style.background = 'var(--gold-soft)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--gold)'; }}
           >
-            <ShoppingCart size={13} />
             Add to Cart
           </button>
         </div>

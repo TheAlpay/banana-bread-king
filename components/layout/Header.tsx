@@ -1,91 +1,240 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useState } from 'react'
 import { useCartStore } from '@/store/cartStore'
-import { ShoppingBag, Menu, X, User } from 'lucide-react'
+
+const CrownSvg = () => (
+  <svg className="w-[22px] h-[22px] flex-none" viewBox="0 0 24 24" fill="none">
+    <path d="M2 7l4 4 6-7 6 7 4-4-2 13H4L2 7z" stroke="var(--gold)" strokeWidth="1.6" strokeLinejoin="round" fill="rgba(245,197,24,.12)"/>
+  </svg>
+)
 
 export default function Header() {
+  const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const { openCart, getTotalItems } = useCartStore()
   const totalItems = getTotalItems()
 
-  return (
-    <header className="bg-[#1C0A00] text-[#FAF6EF] sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-[66px]">
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
-        {/* Logo */}
-        <Link href="/" className="font-playfair text-[22px] font-bold tracking-tight hover:opacity-80 transition-opacity flex items-center gap-2">
-          <span className="text-[#C6862A]">🍌</span>
-          <span>Banana Bread King</span>
+  return (
+    <>
+      <nav
+        style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0,
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: scrolled ? '14px clamp(20px,5vw,72px)' : '22px clamp(20px,5vw,72px)',
+          background: scrolled ? 'rgba(8,6,4,0.72)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(16px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+          borderBottom: scrolled ? '1px solid var(--hairline-2)' : '1px solid transparent',
+          transition: 'background .4s, backdrop-filter .4s, padding .4s, border-color .4s',
+        }}
+      >
+        {/* Brand */}
+        <Link
+          href="/"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            fontFamily: 'var(--font-anton)',
+            fontSize: '20px',
+            letterSpacing: '.04em',
+            textTransform: 'uppercase',
+            color: 'var(--cream)',
+            whiteSpace: 'nowrap',
+            textDecoration: 'none',
+          }}
+        >
+          <CrownSvg />
+          Banana Bread King
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-7">
+        {/* Desktop nav links */}
+        <div className="hidden md:flex" style={{ gap: '38px' }}>
           {[
-            { href: '/products', label: 'Shop All' },
-            { href: '/products/classic', label: 'Classic Range' },
-            { href: '/products/gluten-free-vegan', label: 'GF & Vegan' },
+            { href: '/products', label: 'Menu' },
+            { href: '/about', label: 'Story' },
+            { href: '/#why', label: 'Local' },
+            { href: '/#foot', label: 'Contact' },
           ].map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="text-[13px] font-medium text-[#B89878] hover:text-[#FAF6EF] transition-colors tracking-wide"
+              style={{
+                fontSize: '13px',
+                fontWeight: 600,
+                letterSpacing: '.16em',
+                textTransform: 'uppercase',
+                color: 'var(--cream-dim)',
+                position: 'relative',
+                padding: '4px 0',
+                transition: 'color .3s',
+                textDecoration: 'none',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--cream)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--cream-dim)'; }}
             >
               {label}
             </Link>
           ))}
-        </nav>
+        </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-5">
-          <Link href="/account" className="hidden md:block text-[#B89878] hover:text-[#FAF6EF] transition-colors" aria-label="Account">
-            <User size={18} />
-          </Link>
-
+        {/* Right: cart + order now + hamburger */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+          {/* Cart */}
           <button
             onClick={openCart}
-            className="relative text-[#B89878] hover:text-[#FAF6EF] transition-colors"
-            aria-label="Cart"
+            aria-label="Open cart"
+            style={{
+              position: 'relative',
+              width: '42px', height: '42px',
+              borderRadius: '50%',
+              border: '1px solid var(--hairline)',
+              display: 'grid',
+              placeItems: 'center',
+              background: 'none',
+              cursor: 'pointer',
+              transition: 'border-color .3s',
+              color: 'var(--cream)',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--gold)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'; }}
           >
-            <ShoppingBag size={20} />
+            <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" style={{ width: '18px', height: '18px', stroke: 'var(--cream)' }}>
+              <path d="M6 7h13l-1.3 9.3a2 2 0 0 1-2 1.7H9.3a2 2 0 0 1-2-1.7L6 7zM6 7L5 3H3" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="9.5" cy="20.5" r="1.2" fill="var(--cream)" stroke="none"/>
+              <circle cx="16" cy="20.5" r="1.2" fill="var(--cream)" stroke="none"/>
+            </svg>
             {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2.5 bg-[#C6862A] text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-0.5 leading-none">
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '-5px', right: '-5px',
+                  minWidth: '20px', height: '20px',
+                  padding: '0 5px',
+                  borderRadius: '999px',
+                  background: 'var(--gold)',
+                  color: '#1a1206',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  display: 'grid',
+                  placeItems: 'center',
+                  animation: 'cart-bump .5s cubic-bezier(.2,.8,.2,1)',
+                }}
+              >
                 {totalItems}
               </span>
             )}
           </button>
 
-          <button
-            className="md:hidden text-[#B89878] hover:text-[#FAF6EF] transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menu"
+          {/* Order Now button - desktop only */}
+          <Link
+            href="/products"
+            className="hidden md:inline-flex bbk-btn bbk-btn-amber"
+            style={{ padding: '11px 22px', fontSize: '13px' }}
           >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            Order Now
+          </Link>
+
+          {/* Hamburger - mobile */}
+          <button
+            className="md:hidden"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Menu"
+            style={{
+              width: '42px', height: '42px',
+              border: '1px solid var(--hairline)',
+              borderRadius: '50%',
+              display: 'grid',
+              placeItems: 'center',
+              background: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18">
+              <path d="M1 4h16M1 9h16M1 14h16" stroke="var(--cream)" strokeWidth="1.6" strokeLinecap="round"/>
+            </svg>
           </button>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile nav */}
-      {mobileOpen && (
-        <div className="md:hidden border-t border-white/10 bg-[#1C0A00] px-5 py-5 flex flex-col gap-1">
-          {[
-            { href: '/products', label: 'Shop All' },
-            { href: '/products/classic', label: 'Classic Range' },
-            { href: '/products/gluten-free-vegan', label: 'GF & Vegan Range' },
-            { href: '/account', label: 'My Account' },
-          ].map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setMobileOpen(false)}
-              className="text-[#B89878] hover:text-white py-2.5 text-sm font-medium transition-colors border-b border-white/5 last:border-0"
-            >
-              {label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </header>
+      {/* Mobile nav overlay */}
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 1050,
+          background: 'rgba(8,6,4,0.98)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          opacity: mobileOpen ? 1 : 0,
+          visibility: mobileOpen ? 'visible' : 'hidden',
+          transition: 'opacity .4s, visibility .4s',
+        }}
+      >
+        <button
+          onClick={() => setMobileOpen(false)}
+          aria-label="Close"
+          style={{
+            position: 'absolute',
+            top: '24px', right: '24px',
+            width: '48px', height: '48px',
+            borderRadius: '50%',
+            border: '1px solid var(--hairline)',
+            display: 'grid',
+            placeItems: 'center',
+            fontSize: '22px',
+            color: 'var(--cream)',
+            background: 'none',
+            cursor: 'pointer',
+          }}
+        >
+          ✕
+        </button>
+        {[
+          { href: '/products', label: 'Menu' },
+          { href: '/about', label: 'Story' },
+          { href: '/#why', label: 'Local' },
+          { href: '/#foot', label: 'Contact' },
+          { href: '/account', label: 'Account' },
+        ].map(({ href, label }) => (
+          <Link
+            key={href}
+            href={href}
+            onClick={() => setMobileOpen(false)}
+            style={{
+              fontFamily: 'var(--font-anton)',
+              fontSize: 'clamp(34px,9vw,56px)',
+              textTransform: 'uppercase',
+              color: 'var(--cream-dim)',
+              letterSpacing: '.02em',
+              transition: 'color .3s',
+              textDecoration: 'none',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--gold)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--cream-dim)'; }}
+          >
+            {label}
+          </Link>
+        ))}
+      </div>
+    </>
   )
 }

@@ -6,7 +6,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
   return (
     <>
       <Header />
-      <main className="min-h-screen">{children}</main>
+      <main>{children}</main>
       <Footer />
       <CartDrawer />
     </>

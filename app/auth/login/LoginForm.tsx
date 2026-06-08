@@ -10,6 +10,12 @@ import {
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
 
+const CrownSvg = () => (
+  <svg className="w-[22px] h-[22px] flex-none" viewBox="0 0 24 24" fill="none">
+    <path d="M2 7l4 4 6-7 6 7 4-4-2 13H4L2 7z" stroke="var(--gold)" strokeWidth="1.6" strokeLinejoin="round" fill="rgba(245,197,24,.12)"/>
+  </svg>
+)
+
 export default function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -71,95 +77,170 @@ export default function LoginForm() {
     }
   }
 
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    background: 'rgba(255,255,255,.03)',
+    border: '1px solid var(--hairline)',
+    borderRadius: '12px',
+    padding: '15px 16px',
+    color: 'var(--cream)',
+    fontFamily: 'inherit',
+    fontSize: '15px',
+    outline: 'none',
+    transition: 'border-color .3s, background .3s',
+  }
+
   return (
-    <div className="min-h-screen bg-[#FAF6EF] flex items-center justify-center px-5">
-      <div className="w-full max-w-[420px]">
-        {/* Logo */}
-        <div className="text-center mb-10">
-          <Link href="/" className="inline-flex items-center gap-2 font-playfair text-2xl font-bold text-[#1C0A00]">
-            <span className="text-[#C6862A]">🍌</span>
+    <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 1fr', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
+
+      {/* LEFT: Visual side */}
+      <div style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg,#241809,#1a1208)' }} className="hidden md:block">
+        {/* Texture */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg,rgba(245,197,24,.04) 0 2px,transparent 2px 18px)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg,rgba(8,6,4,.55),rgba(8,6,4,.35) 50%,rgba(8,6,4,.7))' }} />
+        <div style={{ position: 'absolute', inset: 0, zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 'clamp(34px,4vw,60px)' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'var(--font-anton)', fontSize: '21px', letterSpacing: '.04em', textTransform: 'uppercase', color: 'var(--cream)', textDecoration: 'none' }}>
+            <CrownSvg />
             Banana Bread King
           </Link>
-          <h1 className="text-xl font-semibold text-[#1C0A00] mt-5 mb-1">Welcome back</h1>
-          <p className="text-[#A08060] text-sm">Sign in to your account</p>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-[0_2px_16px_rgba(0,0,0,0.07)] p-8">
-          {/* Google */}
-          <button
-            onClick={handleGoogleLogin}
-            disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 border-2 border-[#E8D5B8] rounded-xl py-3 text-sm font-semibold text-[#3D1A08] hover:bg-[#FAF6EF] hover:border-[#5C2B0F] transition-all disabled:opacity-60 mb-5"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-            </svg>
-            {googleLoading ? 'Signing in...' : 'Continue with Google'}
-          </button>
-
-          <div className="relative mb-5">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#F2E4CE]" />
+          <div style={{ maxWidth: '18ch' }}>
+            <blockquote style={{ fontFamily: 'var(--font-playfair)', fontStyle: 'italic', fontWeight: 500, fontSize: 'clamp(28px,3.6vw,48px)', lineHeight: 1.15, color: 'var(--cream)' }}>
+              Every loaf begins before dawn, while Brisbane sleeps.
+            </blockquote>
+            <div style={{ marginTop: '20px', fontSize: '12px', fontWeight: 600, letterSpacing: '.22em', textTransform: 'uppercase', color: 'var(--gold)' }}>
+              — The Bakehouse, Fortitude Valley
             </div>
-            <div className="relative flex justify-center text-xs text-[#B89878] bg-white px-3">or</div>
+          </div>
+          <Link href="/" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--cream-dim)', textDecoration: 'none', transition: 'color .3s' }}>
+            ← Back to home
+          </Link>
+        </div>
+      </div>
+
+      {/* RIGHT: Form side */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(40px,5vw,80px) clamp(24px,4vw,56px)', background: 'linear-gradient(180deg,#0c0907,#070504)' }}>
+        <div style={{ width: '100%', maxWidth: '420px' }}>
+
+          {/* Mobile brand */}
+          <div className="md:hidden" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'var(--font-anton)', fontSize: '20px', letterSpacing: '.04em', textTransform: 'uppercase', color: 'var(--cream)', marginBottom: '32px' }}>
+            <CrownSvg />
+            Banana Bread King
           </div>
 
-          <form onSubmit={handleEmailLogin} className="space-y-4">
-            {error && (
-              <div className="bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl px-4 py-3">
-                {error}
-              </div>
-            )}
+          {/* Tabs */}
+          <div style={{ display: 'inline-flex', gap: '4px', padding: '4px', borderRadius: '999px', border: '1px solid var(--hairline)', background: 'rgba(255,255,255,.02)', marginBottom: '34px' }}>
+            <span style={{ padding: '9px 22px', borderRadius: '999px', fontSize: '13px', fontWeight: 600, letterSpacing: '.06em', background: 'var(--gold)', color: '#1a1206' }}>
+              Login
+            </span>
+            <Link href="/auth/register" style={{ padding: '9px 22px', borderRadius: '999px', fontSize: '13px', fontWeight: 600, letterSpacing: '.06em', color: 'var(--muted)', textDecoration: 'none', transition: 'color .3s' }}>
+              Register
+            </Link>
+          </div>
+
+          <h1 style={{ fontFamily: 'var(--font-playfair)', fontStyle: 'italic', fontWeight: 600, fontSize: 'clamp(34px,4vw,50px)', color: 'var(--cream)', lineHeight: 1.05, marginBottom: '10px' }}>
+            Welcome Back
+          </h1>
+          <p style={{ color: 'var(--muted)', fontSize: '14px', marginBottom: '30px' }}>
+            Sign in to track orders, save favourites and reorder in a tap.
+          </p>
+
+          {error && (
+            <div style={{ marginBottom: '20px', padding: '13px 16px', borderRadius: '12px', background: 'rgba(196,119,26,.12)', border: '1px solid rgba(196,119,26,.4)', color: 'var(--amber)', fontSize: '13px', fontWeight: 600 }}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleEmailLogin} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-[#7A5A42] mb-2">
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '9px' }}>
                 Email
               </label>
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 required
-                className="w-full border-2 border-[#E8D5B8] rounded-xl px-4 py-3 text-sm text-[#1C0A00] placeholder:text-[#C4A882] focus:outline-none focus:border-[#5C2B0F] transition-colors bg-[#FAF6EF]"
                 placeholder="you@example.com"
+                autoComplete="email"
+                style={inputStyle}
+                onFocus={e => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.background = 'rgba(245,197,24,.04)'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = 'var(--hairline)'; e.currentTarget.style.background = 'rgba(255,255,255,.03)'; }}
               />
             </div>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-[#7A5A42]">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '9px' }}>
+                <label style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--muted)' }}>
                   Password
                 </label>
-                <Link href="/auth/forgot-password" className="text-xs text-[#5C2B0F] hover:underline font-medium">
-                  Forgot?
+                <Link href="/auth/forgot-password" style={{ fontSize: '13px', color: 'var(--amber)', textDecoration: 'none' }}>
+                  Forgot password?
                 </Link>
               </div>
               <input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full border-2 border-[#E8D5B8] rounded-xl px-4 py-3 text-sm text-[#1C0A00] placeholder:text-[#C4A882] focus:outline-none focus:border-[#5C2B0F] transition-colors bg-[#FAF6EF]"
                 placeholder="••••••••"
+                autoComplete="current-password"
+                style={inputStyle}
+                onFocus={e => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.background = 'rgba(245,197,24,.04)'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = 'var(--hairline)'; e.currentTarget.style.background = 'rgba(255,255,255,.03)'; }}
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#5C2B0F] text-[#FAF6EF] py-3.5 rounded-xl font-semibold text-sm hover:bg-[#3D1A08] transition-colors disabled:opacity-60 shadow-sm"
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '.6em',
+                padding: '17px', borderRadius: '999px', marginBottom: '4px',
+                background: 'var(--gold)', color: '#1a1206',
+                fontFamily: 'var(--font-hanken)', fontWeight: 700, fontSize: '14px', letterSpacing: '.08em', textTransform: 'uppercase',
+                border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? .6 : 1,
+                transition: 'background .3s, transform .3s',
+                boxShadow: '0 10px 40px -12px rgba(245,197,24,.6)',
+              }}
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Signing in…' : 'Sign In'} {!loading && <span>→</span>}
             </button>
           </form>
-        </div>
 
-        <p className="text-center text-sm text-[#A08060] mt-6">
-          {"Don't have an account? "}
-          <Link href="/auth/register" className="text-[#5C2B0F] font-semibold hover:underline">
-            Create one
-          </Link>
-        </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: 'var(--muted-2)', fontSize: '12px', letterSpacing: '.1em', textTransform: 'uppercase', margin: '18px 0' }}>
+            <span style={{ flex: 1, height: '1px', background: 'var(--hairline)' }} />
+            or
+            <span style={{ flex: 1, height: '1px', background: 'var(--hairline)' }} />
+          </div>
+
+          <button
+            onClick={handleGoogleLogin}
+            disabled={googleLoading}
+            style={{
+              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
+              padding: '15px', borderRadius: '999px',
+              border: '1px solid var(--hairline)', background: 'rgba(255,255,255,.02)',
+              color: 'var(--cream)', fontFamily: 'var(--font-hanken)', fontWeight: 600, fontSize: '14px',
+              cursor: googleLoading ? 'not-allowed' : 'pointer', opacity: googleLoading ? .6 : 1,
+              transition: 'border-color .3s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--gold)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--hairline)'; }}
+          >
+            <svg viewBox="0 0 48 48" style={{ width: '18px', height: '18px' }}>
+              <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.4 5.4 2.5 13.3l7.9 6.1C12.2 13.4 17.6 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.5 3-2.2 5.5-4.7 7.2l7.3 5.7c4.3-4 6.8-9.9 6.8-17.4z"/>
+              <path fill="#FBBC05" d="M10.4 28.6c-.5-1.5-.8-3-.8-4.6s.3-3.1.8-4.6l-7.9-6.1C.9 16.5 0 20.1 0 24s.9 7.5 2.5 10.7l7.9-6.1z"/>
+              <path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.3-5.7c-2 1.4-4.7 2.3-7.9 2.3-6.4 0-11.8-3.9-13.6-9.4l-7.9 6.1C6.4 42.6 14.6 48 24 48z"/>
+            </svg>
+            {googleLoading ? 'Signing in…' : 'Continue with Google'}
+          </button>
+
+          <p style={{ marginTop: '26px', textAlign: 'center', fontSize: '14px', color: 'var(--muted)' }}>
+            New to Banana Bread King?{' '}
+            <Link href="/auth/register" style={{ color: 'var(--gold)', fontWeight: 600, textDecoration: 'none' }}>
+              Create an account
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )
