@@ -200,47 +200,6 @@ export default function HomePage() {
             {"Brisbane's"}
           </h1>
 
-          {/* Hero loaf placeholder */}
-          <div
-            style={{
-              position:    'relative',
-              margin:      '-3vh auto -3vh',
-              width:       'min(380px,54vw)',
-              aspectRatio: '1 / .78',
-              zIndex:      2,
-              filter:      'drop-shadow(0 40px 60px rgba(0,0,0,.7))',
-            }}
-          >
-            <div
-              style={{
-                width:        '100%',
-                height:       '100%',
-                borderRadius: '18px',
-                background:
-                  'radial-gradient(70% 60% at 50% 38%, rgba(245,197,24,.10), transparent 70%), repeating-linear-gradient(135deg, rgba(255,255,255,.018) 0 14px, rgba(255,255,255,0) 14px 28px), linear-gradient(180deg,#171009,#0c0805)',
-                border:         '1px solid var(--hairline-2)',
-                display:        'flex',
-                alignItems:     'center',
-                justifyContent: 'center',
-                flexDirection:  'column',
-                gap:            '8px',
-              }}
-            >
-              <span
-                style={{
-                  fontFamily:    'monospace',
-                  fontSize:      '11px',
-                  letterSpacing: '.12em',
-                  textTransform: 'uppercase',
-                  color:         'var(--muted)',
-                  opacity:       0.7,
-                }}
-              >
-                hero loaf
-              </span>
-            </div>
-          </div>
-
           <h1
             style={{
               fontFamily:    'var(--font-anton)',
@@ -251,7 +210,7 @@ export default function HomePage() {
               lineHeight:    0.82,
               letterSpacing: '.01em',
               textTransform: 'uppercase',
-              marginTop:     '-1vh',
+              marginTop:     '16px',
             }}
           >
             Finest Bread

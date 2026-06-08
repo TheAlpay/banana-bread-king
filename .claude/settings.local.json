@@ -22,7 +22,27 @@
       "Bash(pkill -f \"next dev\")",
       "Bash(git init *)",
       "Bash(git remote *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git config *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(powershell -Command ' *)",
+      "Bash(xargs sed -i 's/#8B4513/#5C2B0F/g; s/#fdf8f0/#FAF6EF/g; s/#f5e6d3/#F5EAD8/g; s/#e8d5c0/#E8D5B8/g; s/7a3b10/3D1A08/g')",
+      "Bash(xargs grep -l \"\\\\bstorage\\\\b\\\\|import.*\\\\bdb\\\\b\")",
+      "Bash(vercel --version)",
+      "Bash(vercel ls *)",
+      "Bash(vercel inspect *)",
+      "Bash(vercel logs *)",
+      "Bash(vercel *)",
+      "Bash(git commit *)",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(Get-ChildItem -Recurse -Path app -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Get-ChildItem -Recurse -Path components -Directory)",
+      "Bash(Test-Path \"C:\\\\Users\\\\alpay\\\\bananbread-king\\\\app\\\\auth\\\\login\\\\LoginForm.tsx\")",
+      "Bash(Test-Path \"C:\\\\Users\\\\alpay\\\\bananbread-king\\\\app\\\\auth\\\\register\\\\page.tsx\")",
+      "PowerShell(git add *)"
     ]
   }
 }
