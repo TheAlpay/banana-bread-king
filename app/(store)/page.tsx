@@ -111,7 +111,7 @@ export default function HomePage() {
   // WhatsApp Link Builder for custom loaf
   const handleWhatsAppOrder = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
-    const msg = `Merhaba! Banana Bread King web sitenizden kendi ekmeğimi oluşturdum ve sipariş vermek istiyorum:\n\n🍞 *Sipariş Detayları*:\n- Boyut: ${size}\n- Seri: ${range === 'classic' ? 'Classic' : 'Gluten Free & Vegan'}\n- Lezzet: ${currentFlavour.name}\n- Toplam Tutar: ${fmt(price)}\n\nŞimdiden teşekkürler!`
+    const msg = `Hi! I created my custom loaf on the Banana Bread King website and would like to order it:\n\n🍞 *Order Details*:\n- Size: ${size}\n- Range: ${range === 'classic' ? 'Classic' : 'Gluten Free & Vegan'}\n- Flavour: ${currentFlavour.name}\n- Total Price: ${fmt(price)}\n\nThank you!`
     const waUrl = `https://wa.me/61448550416?text=${encodeURIComponent(msg)}`
     window.open(waUrl, '_blank')
   }
@@ -1023,36 +1023,7 @@ export default function HomePage() {
                 }}
               />
 
-              {/* Centre crack (realistic deep split showing moist yellow crumbs) */}
-              <div
-                style={{
-                  position:     'absolute',
-                  top:          '5%',
-                  left:         '50%',
-                  width:        '12%',
-                  height:       '88%',
-                  transform:    'translateX(-50%) rotate(0.5deg)',
-                  background:   'linear-gradient(90deg, #593315 0%, #d89635 25%, #fcd66a 50%, #d89635 75%, #593315 100%)',
-                  boxShadow: `
-                    0 0 10px rgba(0,0,0,0.6),
-                    inset 2px 0 5px rgba(0,0,0,0.5),
-                    inset -2px 0 5px rgba(0,0,0,0.5)
-                  `,
-                  borderRadius: '60% 60% 50% 50% / 10% 10% 90% 90%',
-                  zIndex: 2,
-                }}
-              >
-                {/* Crack interior crumb textures */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: '4px',
-                    backgroundImage: 'radial-gradient(rgba(0,0,0,0.2) 1px, transparent 1px)',
-                    backgroundSize: '4px 4px',
-                    opacity: 0.6
-                  }}
-                />
-              </div>
+
 
               {/* Dynamic ingredients toppings */}
               {getToppings()}
