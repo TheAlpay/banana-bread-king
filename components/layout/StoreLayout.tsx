@@ -1,6 +1,5 @@
 import Header from './Header'
 import Footer from './Footer'
-import CartDrawer from '@/components/cart/CartDrawer'
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,7 +7,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
       <Header />
       <main>{children}</main>
       <Footer />
-      <CartDrawer />
     </>
   )
 }
+

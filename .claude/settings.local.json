@@ -42,7 +42,10 @@
       "Bash(Get-ChildItem -Recurse -Path components -Directory)",
       "Bash(Test-Path \"C:\\\\Users\\\\alpay\\\\bananbread-king\\\\app\\\\auth\\\\login\\\\LoginForm.tsx\")",
       "Bash(Test-Path \"C:\\\\Users\\\\alpay\\\\bananbread-king\\\\app\\\\auth\\\\register\\\\page.tsx\")",
-      "PowerShell(git add *)"
+      "PowerShell(git add *)",
+      "PowerShell(Get-ChildItem C:\\\\Users\\\\alpay\\\\bananbread-king -Name | Where-Object { $_ -notmatch \"node_modules\" })",
+      "Read(//mnt/c/Users/alpay/**)",
+      "Bash(npx firebase-tools *)"
     ]
   }
 }

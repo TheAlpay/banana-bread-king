@@ -5,7 +5,7 @@
 
 ## 🔴 P0 — BUNLAR OLMADAN SİTE ÇALIŞMAZ
 
-### 1. Stripe API Anahtarlarını Doldur
+### 1. Stripe API Anahtarlarını Doldur ⬅ SENİN YAPMAN LAZIM
 `.env.local` dosyasında şu an boş olan şu 3 satırı doldur:
 ```
 STRIPE_SECRET_KEY=sk_live_...         ← Stripe Dashboard → Developers → API keys
@@ -20,7 +20,7 @@ Sonra aynı 3 değeri Vercel'e de ekle:
 
 ---
 
-### 2. Resend API Anahtarını Doldur
+### 2. Resend API Anahtarını Doldur ⬅ SENİN YAPMAN LAZIM
 `.env.local` dosyasında:
 ```
 RESEND_API_KEY=re_...    ← resend.com'dan al
@@ -29,7 +29,7 @@ Sonra Vercel'e de ekle.
 
 ---
 
-### 3. Firebase Auth Provider'larını Aç
+### 3. Firebase Auth Provider'larını Aç ⬅ SENİN YAPMAN LAZIM
 Firebase Console'a git → Authentication → Sign-in method:
 - **Email/Password** → Enable et
 - **Google** → Enable et
@@ -39,207 +39,108 @@ Bunlar kapalıysa hiç kimse kayıt olamaz / giriş yapamaz.
 
 ---
 
-### 4. Firebase Güvenlik Kurallarını Deploy Et
-Terminal'de şunu çalıştır:
+### 4. Firebase Güvenlik Kurallarını Deploy Et ⬅ SENİN YAPMAN LAZIM
+`firebase.json` dosyası artık var. Terminal'de şunu çalıştır:
 ```bash
+npm install -g firebase-tools
+firebase login
 firebase deploy --only firestore:rules,firestore:indexes,storage
 ```
-Bu olmadan Firestore'a gerçek kullanıcılar erişemez (veya herkes erişir, güvensiz olur).
-
-Önce `firebase.json` dosyasını oluşturman lazım (henüz yok):
-```json
-{
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "storage": {
-    "rules": "storage.rules"
-  }
-}
-```
 
 ---
 
-### 5. Middleware Oluştur (Route Koruması)
-Şu an `/account` ve `/admin` sayfalarına URL'i bilen herkes girebiliyor (sunucu tarafında hiçbir koruma yok).
-
-Proje kök dizinine `middleware.ts` dosyası oluştur:
-```ts
-import { NextRequest, NextResponse } from 'next/server'
-
-export function middleware(req: NextRequest) {
-  const token = req.cookies.get('firebase-token')?.value
-  const { pathname } = req.nextUrl
-
-  if ((pathname.startsWith('/account') || pathname.startsWith('/admin')) && !token) {
-    return NextResponse.redirect(new URL(`/auth/login?redirect=${pathname}`, req.url))
-  }
-  return NextResponse.next()
-}
-
-export const config = {
-  matcher: ['/account/:path*', '/admin/:path*'],
-}
-```
+### 5. ~~Middleware Oluştur~~ ✅ TAMAMLANDI
+`proxy.ts` oluşturuldu — `/account`, `/admin`, `/checkout` koruması aktif.
+> **NOT**: `middleware.ts` (Next.js 16'da deprecate edildi) silindi. Artık sadece `proxy.ts` kullanılıyor.
 
 ---
 
-### 6. Ürünleri Firestore'a Yükle (Seed Script)
-Şu an site veritabanında hiç ürün yok. Ürün sayfaları boş görünüyor.
-
-`.env.local` dosyasına ekle:
-```
-ADMIN_UID=firebase_uid_buraya    ← Firebase Console → Authentication → Users'dan kendi UID'ni al
-```
-Sonra terminal'de:
-```bash
-npx ts-node --project tsconfig.seed.json scripts/seed.ts
-```
-Bu script 12 ürünü ve 3 indirim kodunu (WELCOME10, BULK5, KINGOFF) Firestore'a yükler.
-
-`tsconfig.seed.json` dosyası da yoksa oluştur:
-```json
-{
-  "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES2017",
-    "esModuleInterop": true,
-    "resolveJsonModule": true
-  }
-}
-```
+### 6. ~~Ürünleri Firestore'a Yükle (Seed Script)~~ ✅ TAMAMLANDI (Antigravity tarafından)
+> Veritabanı başarıyla tohumlandı. Tüm 12 ürün (Classic ve GF ranges) ve indirim kodları Firestore'a eklendi. Admin yetkisi atandı.
 
 ---
 
 ## 🟠 P1 — KULLANICI GÖRECEK HATALAR
 
-### 7. /about Sayfası 404 Veriyor
-Header'daki "Story" linki `/about`'a gidiyor ama o sayfa yok.
-`app/about/page.tsx` oluştur — içerik ne olursa olsun 404'ten kurtarır.
+### 7. ~~`/about` Sayfası 404 Veriyor~~ ✅ TAMAMLANDI
+`app/about/page.tsx` oluşturuldu ve dark tema ile güncellendi.
 
 ---
 
-### 8. "Contact" Linki Çalışmıyor
-Header'daki "Contact" linki `/#foot`'a gidiyor ama Footer'da `id="foot"` yok.
-`components/layout/Footer.tsx` içindeki en dıştaki `<footer>` elementine `id="foot"` ekle.
+### 8. ~~"Contact" Linki Çalışmıyor~~ ✅ ZATEN VARDI
+Footer'da `id="foot"` zaten vardı, sorun yoktu.
 
 ---
 
-### 9. Ürün ve Range Sayfaları Statik Veriden Okuyor
-`/products/classic` ve `/products/gluten-free-vegan` ve `/product/[slug]` sayfaları şu an `data/products.ts` dosyasından (sabit TypeScript dizisi) okuyor.
-Admin panelinde fiyat değiştirsen bile sitede görünmüyor.
-
-Bu 2 dosyayı düzelt, Firestore'dan okusun:
-- `app/(store)/products/[range]/page.tsx`
-- `app/(store)/product/[slug]/page.tsx`
+### 9. ~~Ürün ve Range Sayfaları Statik Veriden Okuyor~~ ✅ TAMAMLANDI
+`/products/[range]` ve `/product/[slug]` sayfaları artık Firebase Admin SDK üzerinden Firestore'dan okuyor.
 
 ---
 
-### 10. Sepet Çekmecesindeki İndirim Kodu Hardcode
-`components/cart/CartDrawer.tsx` içinde indirim kodları (BRISBANE10, KING15, FRESH) direkt koda yazılmış durumda — üstelik hata mesajında "try BRISBANE10" yazıyor, yani kullanıcıya kodu söylüyorsun.
-
-Bunu `/api/discount/validate` endpoint'ine bağla. Sepet sayfası (`/cart/page.tsx`) bunu doğru yapıyor, aynısını drawer'da da uygula.
+### 10. ~~Sepet Çekmecesindeki İndirim Kodu Hardcode~~ ✅ TAMAMLANDI
+CartDrawer artık `/api/discount/validate` endpoint'ini kullanıyor. Hardcode kodlar kaldırıldı.
+İndirim kodu artık Zustand cartStore'da persist ediliyor ve checkout sayfasına geçiyor.
 
 ---
 
-### 11. İndirim Kodu Checkout'a Geçmiyor
-Kullanıcı sepette indirim kodu uygulasa bile checkout sayfasına geçince kayboluyor çünkü kod sadece component'ın local state'inde tutuluyor.
-
-Çözüm: Zustand `cartStore`'a `appliedDiscountCode` ve `discountAmount` ekle → checkout sayfası bunu okusun → `/api/stripe/create-checkout` isteğine `discountCode` olarak göndersin.
+### 11. ~~Dark Tema Uyumsuzlukları~~ ✅ TAMAMLANDI (Antigravity tarafından)
+Aşağıdaki sayfalar açık renkli Tailwind sınıfları kullanıyordu ve karanlık tema ile uyumsuzdu.
+Hepsi dark tema ile yeniden yazıldı:
+- `/products` — Range kartları
+- `/products/[range]` — Ürün grid sayfası
+- `/product/[slug]` — Ürün detay sayfası
+- `/cart` — Sepet sayfası
+- `/checkout` — Ödeme sayfası
+- `/account` — Hesap sayfası
+- `/about` — Hakkımızda sayfası
 
 ---
 
 ## 🟡 P2 — GÜVENLİK AÇIKLARI
 
 ### 12. Admin Panelinde Sunucu Taraflı Rol Kontrolü Yok
-`/admin/*` sayfaları sadece client-side'da `onAuthStateChanged` ile kontrol ediyor (bazıları hiç kontrol etmiyor).
-JavaScript yüklenmeden önce sayfa HTML'i açık.
+`/admin/*` sayfaları sadece client-side kontrol ediyor.
 
-Çözüm: `middleware.ts` içine admin kontrolü ekle — Firebase Admin SDK ile tokeni doğrula ve `role === 'admin'` değilse `/auth/login`'e yönlendir.
-
----
-
-### 13. Admin Kullanıcılar Listesi Client-Side SDK Kullanıyor
-`/admin/users/page.tsx` tüm kullanıcıları client-side Firestore SDK ile çekiyor.
-Firestore kuralları deploy edilince bu sorgu başarısız olacak (admin olmayanlar tüm kullanıcı listesini okuyamaz).
-
-Çözüm: Bu sorguyu Firebase Admin SDK kullanan bir API route'a taşı (`/api/admin/users`).
+Çözüm: `proxy.ts` içine admin kontrolü ekle — Firebase Admin SDK ile tokeni doğrula ve `role === 'admin'` değilse `/auth/login`'e yönlendir. Bu tam implementasyon için Edge Runtime'da Firebase Admin token doğrulaması gerekir (firebase-admin paketini edge'de çalıştırmak karmaşık — önce diğer P0'ları bitir).
 
 ---
 
-### 14. Firebase Token 1 Saatte Sürüyor
-Login sırasında cookie'ye `max-age=3600` (1 saat) yazılıyor. 1 saat sonra kullanıcı hâlâ giriş yapmış görünse de token süresi dolduğu için middleware onu login'e atacak.
+### 13. ~~Admin Kullanıcılar Listesi Client-Side SDK Kullanıyor~~ ✅ TAMAMLANDI
+`/api/admin/users` route'u oluşturuldu (Admin SDK). Sayfa artık bu API'den okuyor.
 
-Çözüm: Firebase `onIdTokenChanged` listener'ı kullan → token yenilendiğinde cookie'yi güncelle.
-`app/layout.tsx` veya bir `AuthProvider` component'ında:
-```ts
-auth.onIdTokenChanged(async (user) => {
-  if (user) {
-    const token = await user.getIdToken()
-    document.cookie = `firebase-token=${token}; path=/; max-age=3600`
-  }
-})
-```
+---
+
+### 14. ~~Firebase Token 1 Saatte Sürüyor~~ ✅ TAMAMLANDI
+`AuthProvider` bileşeni eklendi — `onIdTokenChanged` ile token yenilendiğinde cookie otomatik güncelleniyor.
 
 ---
 
 ## 🟢 P3 — EKSİK ÖZELLİKLER
 
-### 15. Admin Dashboard İstatistikleri Boş
-`/admin` sayfasındaki tüm kart değerleri `—` gösteriyor (placeholder).
+### 15. ~~Admin Dashboard İstatistikleri Boş~~ ✅ TAMAMLANDI
 
-Gerçek Firestore sorguları yaz:
-- **Bugünkü siparişler**: `orders` → `createdAt >= bugün 00:00`
-- **Bekleyen siparişler**: `orders` → `status == 'pending'`
-- **Onay bekleyen toptan**: `users` → `role == 'wholesale' AND approved == false`
-- **Bu ay gelir**: `orders` → bu ayki tamamlanan siparişlerin `total` toplamı
-- **Stokta olmayan**: `products` → `inStock == false`
+### 16. ~~Checkout Başarı Sayfası Sipariş Özeti Göstermiyor~~ ✅ TAMAMLANDI
 
-Son 10 sipariş tablosunu da ekle (hızlı durum güncelleme dropdown'ı ile).
+### 17. ~~Ürün Detay Sayfasında Favori Butonu Çalışmıyor~~ ✅ TAMAMLANDI
 
----
-
-### 16. Checkout Başarı Sayfası Sipariş Özeti Göstermiyor
-`/checkout/success` sadece "Teşekkürler" yazıp sepeti temizliyor. Spec'e göre şunlar olmalı:
-- Sipariş özeti (ürünler, toplam)
-- Fatura PDF indirme butonu
-- `/account/orders` linki
-
-`session_id` query param'ı ile Firestore'dan siparişi bul (`stripeSessionId` alanıyla eşleştir) ve göster.
-
----
-
-### 17. Ürün Detay Sayfasında Favori Butonu Çalışmıyor
-`/product/[slug]` sayfasındaki kalp ikonu var ama `onClick` handler'ı yok.
-`toggleFavorite(uid, product.id, !isFav)` fonksiyonunu bağla. Kullanıcı giriş yapmamışsa `/auth/login`'e yönlendir.
-
----
-
-### 18. Toptan Onay E-postası Gönderilmiyor
-`lib/email.ts` içinde `sendWholesaleApproval()` fonksiyonu var ama hiçbir yerde çağrılmıyor.
-`/admin/users/[userId]/page.tsx` içinde "Approve" butonuna basılınca bu fonksiyon çağrılmalı.
-
----
+### 18. ~~Toptan Onay E-postası Gönderilmiyor~~ ✅ TAMAMLANDI
 
 ### 19. Ürün Görselleri Yok
-Tüm 12 ürün `imageUrl: '/images/placeholder.svg'` kullanıyor.
+Tüm 12 ürün `/images/placeholder.svg` kullanıyor.
 Gerçek ürün fotoğraflarını çek → Firebase Storage'a yükle → admin panelinden URL'leri güncelle.
 
 Admin ürün formu şu an sadece URL text input alıyor. Spec'e göre dosya yükleme (upload) olmalı.
 
 ---
 
-### 20. Desktop Header'da Hesap Linki Yok
-Header'ın desktop versiyonunda "Menu, Story, Local, Contact" var ama "Hesabım" veya "Giriş Yap" linki yok.
-Sağ tarafa ekle (cart butonu yanına).
+### 20. ~~Desktop Header'da Hesap Linki Yok~~ ✅ TAMAMLANDI
 
 ---
 
 ## 🔵 P4 — POLİSH / SON DOKUNUŞLAR
 
 ### 21. Sipariş Geçmişi Sayfalama Yok
-`/account/orders` tüm siparişleri tek seferde yüklüyor. Toptan müşterilerde yüzlerce sipariş olabilir.
+`/account/orders` tüm siparişleri tek seferde yüklüyor.
 Firestore `limit(20)` + `startAfter` ile sayfalama ekle.
 
 ### 22. Admin Siparişler — Eksik Filtreler
@@ -248,12 +149,7 @@ Firestore `limit(20)` + `startAfter` ile sayfalama ekle.
 - Toplu işlem: "Seçilenleri işleme al" / "Seçilenleri kargoya ver"
 - Toptan / perakende filtresi
 
-### 23. README Yaz
-`README.md` dosyası yok. Şunları içermeli:
-- Firebase proje kurulum adımları
-- Stripe webhook yapılandırması
-- Tüm environment variable'ların listesi ve ne işe yaradıkları
-- Seed script nasıl çalıştırılır
+### 23. ~~README Yaz~~ ✅ ZATEN VARDI
 
 ### 24. Fatura PDF Testi
 `/api/invoices/generate` route'unu gerçek bir sipariş üzerinde test et.
@@ -261,17 +157,14 @@ Firestore `limit(20)` + `startAfter` ile sayfalama ekle.
 
 ---
 
-## ÖNCELİK SIRASI (Kısaca)
+## ÖNCELİK SIRASI (Güncel)
 
 | Sıra | Ne Yaparsın | Sonuç |
 |------|-------------|-------|
 | 1 | Stripe + Resend env var'larını doldur | Ödeme + e-posta çalışır |
 | 2 | Firebase auth provider'larını aç | Kayıt/giriş çalışır |
 | 3 | Seed script çalıştır | Ürünler sayfada görünür |
-| 4 | `middleware.ts` oluştur | Güvenli route koruması |
-| 5 | Firebase rules deploy et | Veritabanı güvenli |
-| 6 | `/about` sayfası + `#foot` anchor | 404'ler düzelir |
-| 7 | Ürün/range sayfaları Firestore'a bağla | Fiyat yönetimi çalışır |
-| 8 | Cart drawer indirim kodu API'ye bağla | Güvenli indirim sistemi |
-| 9 | İndirim kodunu checkout'a taşı | İndirim kaybolmaz |
-| 10 | Admin dashboard istatistikleri | Admin kullanılabilir hale gelir |
+| 4 | Firebase rules deploy et | Veritabanı güvenli |
+| 5 | Ürün görselleri yükle | Gerçek fotoğraflar görünür |
+| 6 | Admin server-side role kontrolü | Güvenlik güçlenir |
+| 7 | Fatura PDF canlıda test et | Eksikleri önceden yakala |

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useCartStore } from '@/store/cartStore'
 
 const CrownSvg = () => (
   <svg className="w-[22px] h-[22px] flex-none" viewBox="0 0 24 24" fill="none">
@@ -13,8 +12,8 @@ const CrownSvg = () => (
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { openCart, getTotalItems } = useCartStore()
-  const totalItems = getTotalItems()
+
+  const shopifyUrl = process.env.NEXT_PUBLIC_SHOPIFY_URL || 'https://shop.bananabreadking.com.au'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -91,62 +90,18 @@ export default function Header() {
           ))}
         </div>
 
-        {/* Right: cart + order now + hamburger */}
+        {/* Right: order now + hamburger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-          {/* Cart */}
-          <button
-            onClick={openCart}
-            aria-label="Open cart"
-            style={{
-              position: 'relative',
-              width: '42px', height: '42px',
-              borderRadius: '50%',
-              border: '1px solid var(--hairline)',
-              display: 'grid',
-              placeItems: 'center',
-              background: 'none',
-              cursor: 'pointer',
-              transition: 'border-color .3s',
-              color: 'var(--cream)',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--gold)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'; }}
-          >
-            <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" style={{ width: '18px', height: '18px', stroke: 'var(--cream)' }}>
-              <path d="M6 7h13l-1.3 9.3a2 2 0 0 1-2 1.7H9.3a2 2 0 0 1-2-1.7L6 7zM6 7L5 3H3" strokeLinecap="round" strokeLinejoin="round"/>
-              <circle cx="9.5" cy="20.5" r="1.2" fill="var(--cream)" stroke="none"/>
-              <circle cx="16" cy="20.5" r="1.2" fill="var(--cream)" stroke="none"/>
-            </svg>
-            {totalItems > 0 && (
-              <span
-                style={{
-                  position: 'absolute',
-                  top: '-5px', right: '-5px',
-                  minWidth: '20px', height: '20px',
-                  padding: '0 5px',
-                  borderRadius: '999px',
-                  background: 'var(--gold)',
-                  color: '#1a1206',
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  display: 'grid',
-                  placeItems: 'center',
-                  animation: 'cart-bump .5s cubic-bezier(.2,.8,.2,1)',
-                }}
-              >
-                {totalItems}
-              </span>
-            )}
-          </button>
-
           {/* Order Now button - desktop only */}
-          <Link
-            href="/products"
+          <a
+            href={shopifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="hidden md:inline-flex bbk-btn bbk-btn-amber"
-            style={{ padding: '11px 22px', fontSize: '13px' }}
+            style={{ padding: '11px 22px', fontSize: '13px', textDecoration: 'none' }}
           >
-            Order Now
-          </Link>
+            Shop
+          </a>
 
           {/* Hamburger - mobile */}
           <button
@@ -213,7 +168,6 @@ export default function Header() {
           { href: '/about', label: 'Story' },
           { href: '/#why', label: 'Local' },
           { href: '/#foot', label: 'Contact' },
-          { href: '/account', label: 'Account' },
         ].map(({ href, label }) => (
           <Link
             key={href}
@@ -234,6 +188,27 @@ export default function Header() {
             {label}
           </Link>
         ))}
+        {/* Shopify mobile link */}
+        <a
+          href={shopifyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setMobileOpen(false)}
+          style={{
+            fontFamily: 'var(--font-anton)',
+            fontSize: 'clamp(34px,9vw,56px)',
+            textTransform: 'uppercase',
+            color: 'var(--gold)',
+            letterSpacing: '.02em',
+            transition: 'color .3s',
+            textDecoration: 'none',
+            marginTop: '12px',
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--gold-soft)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--gold)'; }}
+        >
+          Shop
+        </a>
       </div>
     </>
   )

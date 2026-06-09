@@ -85,7 +85,6 @@ export default function Footer() {
                 { href: '/products', label: 'Menu' },
                 { href: '/products/classic', label: 'Classic Range' },
                 { href: '/products/gluten-free-vegan', label: 'GF & Vegan' },
-                { href: '/account', label: 'Account' },
               ].map(({ href, label }) => (
                 <li key={href}>
                   <Link href={href} style={{ color: 'var(--cream-dim)', fontSize: '14px', transition: 'color .3s' }}
@@ -105,8 +104,7 @@ export default function Footer() {
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '11px' }}>
               <li><a href="tel:+61413061411" style={{ color: 'var(--cream-dim)', fontSize: '14px', transition: 'color .3s' }}>+61 413 061 411</a></li>
               <li><a href="mailto:info@bananabreadking.com.au" style={{ color: 'var(--cream-dim)', fontSize: '14px', transition: 'color .3s' }}>info@bananabreadking.com.au</a></li>
-              <li><a href="mailto:order@bananabreadking.com.au" style={{ color: 'var(--cream-dim)', fontSize: '14px', transition: 'color .3s' }}>order@bananabreadking.com.au</a></li>
-              <li style={{ color: 'var(--cream-dim)', fontSize: '14px' }}>Fortitude Valley, Brisbane QLD</li>
+              <li style={{ color: 'var(--cream-dim)', fontSize: '14px', lineHeight: 1.4 }}>1/337 Sandgate Road,<br />Albion QLD 4010</li>
             </ul>
           </div>
 
@@ -117,11 +115,10 @@ export default function Footer() {
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '11px' }}>
               {[
-                { href: '/auth/login', label: 'Login' },
-                { href: '/auth/register', label: 'Register' },
-                { href: '/account/orders', label: 'My Orders' },
+                { href: '/terms', label: 'Terms & Conditions' },
+                { href: '/terms', label: 'E-A-T Sourcing Policy' },
               ].map(({ href, label }) => (
-                <li key={href}>
+                <li key={label}>
                   <Link href={href} style={{ color: 'var(--cream-dim)', fontSize: '14px', transition: 'color .3s' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--gold)'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--cream-dim)'; }}

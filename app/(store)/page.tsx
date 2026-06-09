@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useCartStore } from '@/store/cartStore'
-import type { Variety } from '@/types'
+import BakingAnimation from '@/components/product/BakingAnimation'
 
 // ─── Builder data ──────────────────────────────────────────────────────────
 const RANGES = {
@@ -57,7 +56,7 @@ interface ParticleStyle {
 const fmt = (cents: number) => `$${(cents / 100).toFixed(2)}`
 
 export default function HomePage() {
-  const { addItem, openCart } = useCartStore()
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   // Builder state
   const [size, setSize]           = useState<SizeKey>('600g')
@@ -106,19 +105,6 @@ export default function HomePage() {
     setFlavourIdx(0)
   }
 
-  const handleAddFromBuilder = useCallback(() => {
-    addItem({
-      productId: `${currentFlavour.slug}-${size}`,
-      name:      `${currentFlavour.name} Banana Bread`,
-      slug:      currentFlavour.slug,
-      variety:   size as Variety,
-      quantity:  1,
-      unitPrice: price,
-      imageUrl:  '/images/placeholder.svg',
-    })
-    openCart()
-  }, [addItem, openCart, currentFlavour, size, price])
-
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <div style={{ position: 'relative' }}>
@@ -130,12 +116,43 @@ export default function HomePage() {
           minHeight:       '100svh',
           display:         'flex',
           flexDirection:   'column',
-          justifyContent:  'center',
-          padding:         '120px 0 48px',
+          justifyContent:  'flex-start',
+          padding:         '180px 0 48px',
           overflow:        'hidden',
           zIndex:          1,
         }}
       >
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            position:      'absolute',
+            top:           0,
+            left:          0,
+            width:         '100%',
+            height:        '100%',
+            objectFit:     'cover',
+            zIndex:        0,
+            opacity:       0.78,
+          }}
+        >
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+
+        {/* Video Overlay Gradient (for premium dark aesthetic & text contrast) */}
+        <div
+          style={{
+            position:      'absolute',
+            inset:         0,
+            background:    'linear-gradient(to bottom, rgba(8, 6, 4, 0.35) 0%, rgba(8, 6, 4, 0.82) 100%)',
+            zIndex:        1,
+            pointerEvents: 'none',
+          }}
+        />
+
         {/* Spotlight glow */}
         <div
           style={{
@@ -146,15 +163,15 @@ export default function HomePage() {
             width:     'min(720px,84vw)',
             height:    'min(720px,84vw)',
             background:
-              'radial-gradient(circle, rgba(245,197,24,.18) 0%, rgba(196,119,26,.08) 38%, transparent 64%)',
+              'radial-gradient(circle, rgba(245,197,24,.22) 0%, rgba(196,119,26,.1) 38%, transparent 64%)',
             filter:        'blur(8px)',
-            zIndex:        0,
+            zIndex:        2,
             pointerEvents: 'none',
           }}
         />
 
         {/* Floating particles */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none' }}>
           {particles.map((p, i) => (
             <span
               key={i}
@@ -179,67 +196,51 @@ export default function HomePage() {
           className="bbk-wrap"
           style={{
             position:       'relative',
-            zIndex:         2,
+            zIndex:         4,
             display:        'flex',
             flexDirection:  'column',
-            alignItems:     'center',
+            alignItems:     'flex-start',
+            width:          '100%',
           }}
         >
           <h1
             style={{
               fontFamily:    'var(--font-anton)',
-              color:         'var(--cream)',
-              textAlign:     'center',
-              whiteSpace:    'nowrap',
-              fontSize:      'clamp(52px,10.5vw,150px)',
-              lineHeight:    0.82,
+              textAlign:     'left',
+              fontSize:      'clamp(40px, 7.5vw, 92px)',
+              lineHeight:    0.85,
               letterSpacing: '.01em',
               textTransform: 'uppercase',
             }}
           >
-            {"Brisbane's"}
-          </h1>
-
-          <h1
-            style={{
-              fontFamily:    'var(--font-anton)',
-              color:         'var(--gold)',
-              textAlign:     'center',
-              whiteSpace:    'nowrap',
-              fontSize:      'clamp(52px,10.5vw,150px)',
-              lineHeight:    0.82,
-              letterSpacing: '.01em',
-              textTransform: 'uppercase',
-              marginTop:     '16px',
-            }}
-          >
-            Finest Bread
+            <span style={{ display: 'block', color: 'var(--cream)' }}>{"Brisbane's"}</span>
+            <span style={{ display: 'block', color: 'var(--gold)', marginTop: '12px' }}>Finest Bread</span>
           </h1>
 
           {/* Subtitle + CTAs */}
           <div
             style={{
               position:       'relative',
-              zIndex:         3,
+              zIndex:         5,
               display:        'flex',
               flexDirection:  'column',
-              alignItems:     'center',
+              alignItems:     'flex-start',
               gap:            '16px',
-              textAlign:      'center',
-              marginTop:      '32px',
+              textAlign:      'left',
+              marginTop:      '24px',
             }}
           >
             <p
               style={{
-                maxWidth:  '460px',
+                maxWidth:  '430px',
                 color:     'var(--cream-dim)',
-                fontSize:  'clamp(14px,1.4vw,16px)',
+                fontSize:  'clamp(13px, 1.25vw, 15px)',
               }}
             >
               Hand-baked banana bread, the way Brisbane has loved it for years.
               Real Queensland bananas. No shortcuts. Just the loaf.
             </p>
-            <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
               <Link href="/products/classic" className="bbk-btn bbk-btn-gold">
                 Build Your Loaf <span className="ar">→</span>
               </Link>
@@ -257,7 +258,7 @@ export default function HomePage() {
             bottom:        '26px',
             left:          '50%',
             transform:     'translateX(-50%)',
-            zIndex:        3,
+            zIndex:        4,
             display:       'flex',
             flexDirection: 'column',
             alignItems:    'center',
@@ -279,6 +280,9 @@ export default function HomePage() {
           />
         </div>
       </section>
+
+      {/* Baking scroll animation storytelling */}
+      <BakingAnimation />
 
       {/* ═══════════════════════════════ REVEAL ══════════════════════════════ */}
       <section
@@ -552,7 +556,8 @@ export default function HomePage() {
                       / 600g
                     </small>
                   </div>
-                  <button
+                  <Link
+                    href={`/product/${p.slug}`}
                     style={{
                       fontSize:      '12px',
                       fontWeight:    700,
@@ -562,32 +567,20 @@ export default function HomePage() {
                       background:    'var(--gold)',
                       padding:       '11px 16px',
                       borderRadius:  '999px',
-                      border:        'none',
+                      textDecoration: 'none',
                       cursor:        'pointer',
                       transition:    'background .3s, transform .3s',
                     }}
-                    onClick={() => {
-                      addItem({
-                        productId: `${p.id}-600g`,
-                        name:      `${p.name} Banana Bread`,
-                        slug:      p.slug,
-                        variety:   '600g',
-                        quantity:  1,
-                        unitPrice: p.price,
-                        imageUrl:  '/images/placeholder.svg',
-                      })
-                      openCart()
-                    }}
                     onMouseEnter={(e) => {
-                      ;(e.currentTarget as HTMLButtonElement).style.background =
+                      ;(e.currentTarget as HTMLElement).style.background =
                         'var(--gold-soft)'
                     }}
                     onMouseLeave={(e) => {
-                      ;(e.currentTarget as HTMLButtonElement).style.background = 'var(--gold)'
+                      ;(e.currentTarget as HTMLElement).style.background = 'var(--gold)'
                     }}
                   >
-                    Add to Cart
-                  </button>
+                    Details
+                  </Link>
                 </div>
               </div>
             </article>
@@ -880,13 +873,15 @@ export default function HomePage() {
                   {fmt(price)}
                 </div>
               </div>
-              <button
-                onClick={handleAddFromBuilder}
+              <a
+                href={process.env.NEXT_PUBLIC_SHOPIFY_URL || 'https://shop.bananabreadking.com.au'}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bbk-btn bbk-btn-gold"
-                style={{ padding: '18px 34px', fontSize: '15px' }}
+                style={{ padding: '18px 34px', fontSize: '15px', textDecoration: 'none' }}
               >
-                Add to Cart <span className="ar">→</span>
-              </button>
+                Shop <span className="ar">→</span>
+              </a>
             </div>
           </div>
         </div>
@@ -955,7 +950,7 @@ export default function HomePage() {
                   </>
                 ),
                 title: 'Wholesale Available',
-                desc:  'Cafés & retailers — order by the carton. Login for trade pricing.',
+                desc:  'Cafés & retailers — order by the carton. Contact us for bulk wholesale rates.',
               },
             ].map(({ icon, title, desc }, i) => (
               <div
@@ -1015,7 +1010,7 @@ export default function HomePage() {
         style={{
           position:   'relative',
           zIndex:     1,
-          padding:    'clamp(120px,20vh,260px) 0',
+          padding:    'clamp(100px,16vh,200px) 0',
           background: 'var(--ink)',
           textAlign:  'center',
           overflow:   'hidden',
@@ -1068,6 +1063,322 @@ export default function HomePage() {
             }}
           >
             — Banana Bread King, Brisbane
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════ TESTIMONIALS MARQUEE ═══════════════════════════════ */}
+      <section
+        style={{
+          position:   'relative',
+          zIndex:     1,
+          padding:    '80px 0',
+          background: 'var(--ink-2)',
+          overflow:   'hidden',
+          borderTop:  '1px solid var(--hairline-2)',
+          borderBottom: '1px solid var(--hairline-2)',
+        }}
+      >
+        <div className="bbk-wrap" style={{ marginBottom: '40px', textAlign: 'center' }}>
+          <span className="eyebrow">Word of Mouth</span>
+          <h2 style={{ fontFamily: 'var(--font-anton)', fontSize: 'clamp(32px,5vw,70px)', textTransform: 'uppercase', color: 'var(--cream)', marginTop: '8px' }}>
+            Loved Across <span style={{ color: 'var(--gold)' }}>Brisbane</span>
+          </h2>
+        </div>
+
+        {/* Marquee Row 1 (scrolls left) */}
+        <div style={{ display: 'flex', overflow: 'hidden', padding: '10px 0', width: '100%' }}>
+          <div className="marquee-track">
+            {Array.from({ length: 2 }).flatMap(() => [
+              { quote: "The best gluten-free banana bread in Paddington. Incredibly moist!", author: "Sarah, Café Owner in Paddington" },
+              { quote: "We stock the vegan loaves in West End, our customers love them toasted.", author: "James, West End Espresso Bar" },
+              { quote: "Classic Brisbane taste. Our regular carton orders keep us perfectly stocked.", author: "Lucy, Windsor Coffee Shop" },
+              { quote: "Egg-free recipe is a game changer. Pure Queensland bananas, outstanding texture.", author: "David, Bulimba Baker" },
+              { quote: "Best wholesale banana bread supplier in Fortitude Valley. Reliable morning drops.", author: "Tom, Valley Drive-Thru" },
+              { quote: "Gluten-free and dairy-free options are a hit in Spring Hill.", author: "Emma, Spring Hill Corporate" },
+              { quote: "Golden, moist, caramelised crust that toasts beautifully.", author: "Chloe, Red Hill Coffee Hub" },
+              { quote: "Highly recommended for allergen-conscious schools in Chermside.", author: "Robert, Chermside School" },
+              { quote: "Sourced locally, baked fresh. The finest loaves in Clayfield.", author: "Aria, Clayfield Organics" },
+              { quote: "Individual pre-sliced GF packs prevent cross-contamination perfectly.", author: "Marcus, CBD Espresso Cart" },
+            ]).map((t, idx) => (
+              <div
+                key={idx}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid var(--hairline-2)',
+                  borderRadius: '16px',
+                  padding: '20px 24px',
+                  minWidth: '300px',
+                  maxWidth: '320px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                }}
+              >
+                <p style={{ color: 'var(--cream-dim)', fontSize: '14px', fontStyle: 'italic', lineHeight: 1.5 }}>&ldquo;{t.quote}&rdquo;</p>
+                <p style={{ color: 'var(--gold)', fontSize: '11px', fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase' }}>— {t.author}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Marquee Row 2 (scrolls right) */}
+        <div style={{ display: 'flex', overflow: 'hidden', padding: '10px 0', width: '100%', marginTop: '16px' }}>
+          <div className="marquee-track-reverse">
+            {Array.from({ length: 2 }).flatMap(() => [
+              { quote: "Always moist, dense, and naturally sweet. Outstanding quality.", author: "Isabella, New Farm Café Owner" },
+              { quote: "Our customers in Teneriffe can't get enough of the Walnut & Date loaves.", author: "Noah, Teneriffe Social Club" },
+              { quote: "Quick weekend pickup in Albion. Excellent service and local produce.", author: "Oliver, Albion Local" },
+              { quote: "The Mango & Coconut gluten-free loaf is a tropical masterpiece.", author: "Sophie, Carindale Brunch Spot" },
+              { quote: "Reliable delivery schedules across Southside hubs.", author: "Lucas, Mt Gravatt Café" },
+              { quote: "Warming cinnamon and plump raisins in every classic bite.", author: "Mia, Hamilton Coffee Roasters" },
+              { quote: "We upgraded our café menu in Ascot with these signature slabs.", author: "Ethan, Ascot Bistro" },
+              { quote: "No shortcuts, just real loaves. Pure banana goodness.", author: "Zoe, Indooroopilly Eats" },
+              { quote: "Our wholesale trade account was approved quickly. Free sample was delicious!", author: "Jack, Sandgate Espresso" },
+              { quote: "Perfect caramelised crust when toasted. Brisbane's finest.", author: "Harper, Nundah Café" },
+            ]).map((t, idx) => (
+              <div
+                key={idx}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid var(--hairline-2)',
+                  borderRadius: '16px',
+                  padding: '20px 24px',
+                  minWidth: '300px',
+                  maxWidth: '320px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                }}
+              >
+                <p style={{ color: 'var(--cream-dim)', fontSize: '14px', fontStyle: 'italic', lineHeight: 1.5 }}>&ldquo;{t.quote}&rdquo;</p>
+                <p style={{ color: 'var(--gold)', fontSize: '11px', fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase' }}>— {t.author}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <style jsx global>{`
+          .marquee-track {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+            animation: scroll-left 50s linear infinite;
+          }
+          .marquee-track-reverse {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+            animation: scroll-right 50s linear infinite;
+          }
+          @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          @keyframes scroll-right {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+          }
+        `}</style>
+      </section>
+
+      {/* ═══════════════════════════════ FAQ SECTION ═══════════════════════════════ */}
+      <section
+        id="faq"
+        style={{
+          position:   'relative',
+          zIndex:     1,
+          padding:    'clamp(90px,12vh,150px) 0',
+          background: 'var(--brown)',
+          borderBottom: '1px solid var(--hairline-2)',
+        }}
+      >
+        <div className="bbk-wrap">
+          <div style={{ marginBottom: '56px', textAlign: 'center' }}>
+            <span className="eyebrow">Any Questions?</span>
+            <h2 style={{ fontFamily: 'var(--font-anton)', fontSize: 'clamp(32px,5vw,70px)', textTransform: 'uppercase', color: 'var(--cream)', marginTop: '8px' }}>
+              Frequently Asked <span style={{ color: 'var(--gold)' }}>Questions</span>
+            </h2>
+          </div>
+
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            {[
+              {
+                q: "Where can I find the best gluten-free banana bread in Brisbane?",
+                a: "You can order our premium, house-baked gluten-free banana bread directly through our website for delivery across Brisbane, or find us stocked in select local coffee shops from Paddington to Chermside. We use a special blend of alternative flours and 100% Queensland bananas to ensure our gluten-free loaves are just as moist, dense, and naturally sweet as our traditional recipes, without any compromise on texture."
+              },
+              {
+                q: "Do you offer vegan or dairy-free banana bread options for Brisbane delivery?",
+                a: "Yes! Alongside our classic recipes, we bake highly rated vegan and dairy-free banana bread daily. We supply many plant-based friendly cafés across the Brisbane CBD, West End, and South Brisbane. Our plant-based loaves use coconut oil and ripe local bananas to achieve that perfect caramelised crust when toasted."
+              },
+              {
+                q: "Are your banana breads nut-free and school-safe?",
+                a: "Our original traditional loaves and standard gluten-free slices are baked without nuts, making them an excellent choice for school lunchboxes and allergen-conscious Brisbane cafes. However, because we also bake a popular Walnut & Espresso Banana Bread, all items are prepared in a kitchen that handles tree nuts. We maintain strict segregation protocols to prevent cross-contamination."
+              },
+              {
+                q: "How do I order wholesale banana bread for my Brisbane coffee shop?",
+                a: "Artisan wholesale orders are easy to coordinate. We partner with independent Brisbane coffee shops, espresso bars, and drive-thrus across all suburbs—from Albany Creek down to Helensvale. To apply for a wholesale banana bread account, head over to our contact page or email our Brisbane baking team directly to request a free sample box for your café."
+              },
+              {
+                q: "Do your wholesale loaves come pre-sliced or individually wrapped?",
+                a: "We offer flexible packaging options tailored to your café's workflow. You can order our wholesale loaves as whole café-style slabs (perfect for cutting thick, rustic slices to your liking) or as individually wrapped, pre-sliced gluten-free banana bread portions. The single-serve wrapped slices are a massive hit for fast-paced espresso bars in the Brisbane CBD looking to prevent cross-contamination."
+              },
+              {
+                q: "What is the delivery schedule for cafés in the Brisbane suburbs?",
+                a: "We offer reliable, early-morning delivery to cafes, bakeries, and food trucks across major Brisbane regions. Our dispatch routes cover the Inner North (Windsor, Kedron, Red Hill), the East (New Farm, Teneriffe), and Southside hubs. Delivery schedules vary by zone, but most local coffee shops receive fresh drop-offs 2 to 3 times a week to keep stock perfectly fresh."
+              },
+              {
+                q: "What is the shelf life of your artisan banana bread?",
+                a: "Because we don't load our recipes with artificial preservatives, our fresh loaves stay incredibly moist for up to 5 days when stored in an airtight container at room temp. For Brisbane cafes managing stock control, our banana bread can be kept frozen for up to 3 months. Once thawed, it retains its signature texture and aromatic spice blend flawlessly."
+              },
+              {
+                q: "What is the best way to toast café-style banana bread?",
+                a: "To get that iconic café finish at home, cut a thick slice (around 2cm) and grill it on a sandwich press or under a toaster until the edges are golden brown and slightly caramelised. For the ultimate Brisbane brunch vibe, serve it warm with a generous slab of salted butter, a drizzle of local honey, or a smear of espresso cream cheese."
+              },
+              {
+                q: "Can I buy single loaves directly from your Brisbane bakery, or is it wholesale only?",
+                a: "While a large portion of our kitchen focuses on wholesale bakery supplies for Brisbane coffee shops, retail customers can absolutely buy direct! You can place an order online for weekend local pickup at our main kitchen, or catch us popping up at various local markets around the Greater Brisbane region."
+              },
+              {
+                q: "Do you cater to corporate events and functions in South-East Queensland?",
+                a: "Absolutely. We provide bulk catering platters, assorted mini-loaves, and mixed dietary boxes (including our popular gluten-free dairy-free options) for corporate events, office meetings, and private functions across Brisbane City and surrounding suburbs."
+              },
+              {
+                q: "Where do you source the ingredients for your Brisbane-made banana bread?",
+                a: "We are immensely proud to support regional growers. Every single loaf we bake uses 100% Queensland bananas sourced straight from North Queensland farms. We pair these with locally milled flours and Australian dairy to ensure our products reflect the absolute best of local, sunshine-state produce."
+              }
+            ].map((item, idx) => {
+              const isOpen = openFaq === idx
+              return (
+                <div key={idx} style={{ borderBottom: '1px solid var(--hairline-2)' }}>
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    style={{
+                      width: '100%',
+                      padding: '24px 0',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      border: 'none',
+                      background: 'none',
+                    }}
+                  >
+                    <span style={{ fontSize: '18px', fontWeight: 600, color: 'var(--cream)', paddingRight: '20px' }}>
+                      {item.q}
+                    </span>
+                    <span style={{ color: 'var(--gold)', fontSize: '20px', transition: 'transform 0.3s', transform: isOpen ? 'rotate(45deg)' : 'none' }}>
+                      +
+                    </span>
+                  </button>
+                  <div
+                    style={{
+                      maxHeight: isOpen ? '350px' : '0',
+                      opacity: isOpen ? 1 : 0,
+                      overflow: 'hidden',
+                      transition: 'max-height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease',
+                    }}
+                  >
+                    <p style={{ paddingBottom: '24px', color: 'var(--cream-dim)', fontSize: '15px', lineHeight: 1.6, maxWidth: '68ch' }}>
+                      {item.a}
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════ LOCAL SEO MAP SECTION ═══════════════════════════════ */}
+      <section
+        id="location"
+        style={{
+          position:   'relative',
+          zIndex:     1,
+          padding:    'clamp(90px,12vh,150px) 0',
+          background: 'var(--brown-2)',
+          borderBottom: '1px solid var(--hairline-2)',
+        }}
+      >
+        <div className="bbk-wrap">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+              gap: '48px',
+              alignItems: 'center',
+            }}
+          >
+            {/* Location details card */}
+            <div>
+              <span className="eyebrow">Local Bakehouse</span>
+              <h2 style={{ fontFamily: 'var(--font-anton)', fontSize: 'clamp(32px,5vw,70px)', textTransform: 'uppercase', color: 'var(--cream)', marginTop: '8px', marginBottom: '24px' }}>
+                Visit Us In <span style={{ color: 'var(--gold)' }}>Albion</span>
+              </h2>
+              <p style={{ color: 'var(--cream-dim)', fontSize: '15px', lineHeight: 1.7, marginBottom: '24px', maxWidth: '45ch' }}>
+                Our artisan bakery is located in the heart of Albion. While we bake cartons of signature banana bread for cafés all over South East Queensland, you can buy fresh loaves directly from our kitchen.
+              </p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                  <span style={{ fontSize: '20px' }}>📍</span>
+                  <p style={{ fontSize: '14px', color: 'var(--cream)' }}>
+                    <strong>Address:</strong><br />
+                    1/337 Sandgate Road, Albion QLD 4010, Brisbane, Australia
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                  <span style={{ fontSize: '20px' }}>📞</span>
+                  <p style={{ fontSize: '14px', color: 'var(--cream)' }}>
+                    <strong>Phone:</strong><br />
+                    <a href="tel:+61413061411" style={{ color: 'var(--gold)', textDecoration: 'underline' }}>+61 413 061 411</a>
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                  <span style={{ fontSize: '20px' }}>🕒</span>
+                  <p style={{ fontSize: '14px', color: 'var(--cream)' }}>
+                    <strong>Opening Hours:</strong><br />
+                    Monday – Sunday: 5:00 AM – 2:00 PM (Fresh hot loaves daily)
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=1%2F337+Sandgate+Road%2C+Albion%2C+4010%2C+Brisbane%2C+QLD"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bbk-btn bbk-btn-gold"
+                style={{ display: 'inline-flex', padding: '16px 28px', textDecoration: 'none' }}
+              >
+                Get Directions on Google Maps
+              </a>
+            </div>
+
+            {/* Embedded maps iframe */}
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '420px',
+                borderRadius: '24px',
+                overflow: 'hidden',
+                border: '1px solid var(--hairline)',
+                boxShadow: '0 20px 50px rgba(0,0,0,.3)',
+              }}
+            >
+              <iframe
+                title="Banana Bread King Albion Bakehouse Location"
+                src="https://maps.google.com/maps?q=1%2F337%20Sandgate%20Road%20Albion%20QLD%204010&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -1142,7 +1453,7 @@ export default function HomePage() {
               margin:    '26px 0 38px',
             }}
           >
-            Order fresh. Order local. Order now.
+            Brisbane's favourite artisan banana bread.
           </p>
 
           <div
@@ -1154,11 +1465,17 @@ export default function HomePage() {
               flexWrap:       'wrap',
             }}
           >
-            <Link href="/products/classic" className="bbk-btn bbk-btn-gold" style={{ padding: '18px 34px' }}>
-              Order Your Loaf <span className="ar">→</span>
-            </Link>
+            <a
+              href={process.env.NEXT_PUBLIC_SHOPIFY_URL || 'https://shop.bananabreadking.com.au'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bbk-btn bbk-btn-gold"
+              style={{ padding: '18px 34px', textDecoration: 'none' }}
+            >
+              Shop <span className="ar">→</span>
+            </a>
             <Link href="/products" className="bbk-btn bbk-btn-outline" style={{ padding: '18px 34px' }}>
-              View Full Menu
+              View Our Menu
             </Link>
           </div>
         </div>

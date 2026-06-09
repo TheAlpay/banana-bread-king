@@ -28,18 +28,117 @@ const caveat = Caveat({
 })
 
 export const metadata: Metadata = {
-  title: "Banana Bread King — Brisbane's Finest",
+  title: "Banana Bread King — Brisbane's Finest Banana Bread",
   description:
-    "Hand-baked banana bread, the way Brisbane has loved it for years. Real Queensland bananas. No shortcuts. Just the loaf.",
+    "Hand-baked banana bread, the way Brisbane has loved it for years. Real Queensland bananas. Egg-free, dairy-free & vegan options available.",
+  keywords: [
+    "Banana Bread",
+    "Brisbane Banana Bread",
+    "Vegan Banana Bread",
+    "Gluten Free Banana Bread",
+    "Bakehouse Brisbane",
+    "Egg Free Banana Bread"
+  ],
+  metadataBase: new URL("https://bananabreadking.com.au"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Banana Bread King — Brisbane's Finest Banana Bread",
+    description: "Hand-baked banana bread, the way Brisbane has loved it for years. Real Queensland bananas. No shortcuts. Just the loaf.",
+    url: "https://bananabreadking.com.au",
+    siteName: "Banana Bread King",
+    images: [
+      {
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Banana Bread King",
+      },
+    ],
+    locale: "en_AU",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Banana Bread King — Brisbane's Finest Banana Bread",
+    description: "Hand-baked banana bread, the way Brisbane has loved it for years. Real Queensland bananas.",
+    images: ["/images/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Banana Bread King",
+      "image": "https://bananabreadking.com.au/images/og-image.jpg",
+      "@id": "https://bananabreadking.com.au/#localbusiness",
+      "url": "https://bananabreadking.com.au",
+      "telephone": "+61 413 061 411",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1/337 Sandgate Road",
+        "addressLocality": "Albion, Brisbane",
+        "addressRegion": "QLD",
+        "postalCode": "4010",
+        "addressCountry": "AU"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -27.426284,
+        "longitude": 153.042784
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "05:00",
+        "closes": "14:00"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Banana Bread King",
+      "url": "https://bananabreadking.com.au"
+    }
+  ]
+
   return (
     <html
       lang="en-AU"
       className={`${anton.variable} ${playfair.variable} ${hanken.variable} ${caveat.variable}`}
     >
-      <body>{children}</body>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body>
+        {children}
+      </body>
     </html>
   )
 }

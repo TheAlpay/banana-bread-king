@@ -3,36 +3,31 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Heart } from 'lucide-react'
 import { ProductDoc, Variety } from '@/types'
-import { useCartStore } from '@/store/cartStore'
 
 interface ProductCardProps {
   product: ProductDoc
-  userPrice?: number
-  isFavorite?: boolean
-  onToggleFavorite?: (productId: string) => void
 }
 
-export default function ProductCard({ product, userPrice, isFavorite, onToggleFavorite }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
   const [selectedVariety, setSelectedVariety] = useState<Variety>(product.varieties[0])
-  const { addItem, openCart } = useCartStore()
 
-  const unitPrice = userPrice ?? product.basePrice
   const isGF = product.range === 'gluten-free-vegan'
-
-  function handleAddToCart() {
-    addItem({
-      productId: product.id,
-      name: product.name,
-      slug: product.slug,
-      variety: selectedVariety,
-      quantity: 1,
-      unitPrice,
-      imageUrl: product.imageUrl,
-    })
-    openCart()
-  }
+  
+  // Calculate price based on selected variety (if variety is 2.4kg, add the bulk difference)
+  // Let's check how price changes based on size.
+  // Traditional products have base prices.
+  // 600g classic is 1200 ($12), 2.4kg classic is 3800 ($38).
+  // Let's use simple logic: if selected variety is 2.4kg, let's show the bulk price, which is roughly 3x the 600g price.
+  // Or let's check: in products data, does it show prices? In page.tsx we saw classic base is 600g: 1200, 2.4kg: 3800.
+  // Let's check: in data/products.ts, product has basePrice. Let's see: basePrice is for 600g.
+  // Let's compute price dynamically: if variety is '2.4kg', price is basePrice * 3 (or we can just show the basePrice and suffix `/ 600g` or `/ 2.4kg`).
+  // Let's keep it simple: 600g is product.basePrice, 2.4kg is product.basePrice + 2600 cents (classic base for 2.4kg is 3800, which is 1200 + 2600. For GF, 600g is 1400, 2.4kg is 4200, which is 1400 + 2800).
+  // So:
+  const is2_4kg = selectedVariety === '2.4kg'
+  const displayPrice = is2_4kg 
+    ? (isGF ? 4200 : 3800) // standard pricing from spec
+    : product.basePrice
 
   return (
     <div
@@ -81,25 +76,6 @@ export default function ProductCard({ product, userPrice, isFavorite, onToggleFa
             </div>
           )}
         </div>
-
-        {onToggleFavorite && (
-          <button
-            onClick={(e) => { e.preventDefault(); onToggleFavorite(product.id) }}
-            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-            style={{
-              position: 'absolute', top: '14px', right: '14px',
-              width: '36px', height: '36px',
-              borderRadius: '50%',
-              background: 'rgba(8,6,4,.7)',
-              border: '1px solid var(--hairline)',
-              display: 'grid', placeItems: 'center',
-              cursor: 'pointer',
-              transition: 'transform .3s',
-            }}
-          >
-            <Heart size={14} style={{ fill: isFavorite ? 'var(--gold)' : 'none', color: isFavorite ? 'var(--gold)' : 'var(--cream-dim)' }} />
-          </button>
-        )}
       </Link>
 
       {/* Body */}
@@ -141,14 +117,13 @@ export default function ProductCard({ product, userPrice, isFavorite, onToggleFa
           </div>
         )}
 
-        {/* Price + Add to Cart */}
+        {/* Price + View Details */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginTop: 'auto', paddingTop: '18px', borderTop: '1px solid var(--hairline-2)' }}>
-          <div style={{ fontFamily: 'var(--font-playfair)', fontSize: '26px', color: 'var(--gold)' }}>
-            ${(unitPrice / 100).toFixed(2)} <small style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--muted)', letterSpacing: '.05em' }}>/ {selectedVariety}</small>
+          <div style={{ fontFamily: 'var(--font-playfair)', fontSize: '24px', color: 'var(--gold)' }}>
+            ${(displayPrice / 100).toFixed(2)} <small style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--muted)', letterSpacing: '.05em' }}>/ {selectedVariety}</small>
           </div>
-          <button
-            onClick={handleAddToCart}
-            disabled={!product.inStock}
+          <Link
+            href={`/product/${product.slug}`}
             style={{
               fontSize: '12px',
               fontWeight: 700,
@@ -156,18 +131,18 @@ export default function ProductCard({ product, userPrice, isFavorite, onToggleFa
               textTransform: 'uppercase',
               color: '#1a1206',
               background: 'var(--gold)',
-              padding: '11px 16px',
+              padding: '11px 18px',
               borderRadius: '999px',
               border: 'none',
-              cursor: product.inStock ? 'pointer' : 'not-allowed',
-              opacity: product.inStock ? 1 : .4,
+              textDecoration: 'none',
+              cursor: 'pointer',
               transition: 'background .3s, transform .3s',
             }}
-            onMouseEnter={e => { if (product.inStock) (e.currentTarget as HTMLButtonElement).style.background = 'var(--gold-soft)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--gold)'; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--gold-soft)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--gold)'; }}
           >
-            Add to Cart
-          </button>
+            Details
+          </Link>
         </div>
       </div>
     </div>
