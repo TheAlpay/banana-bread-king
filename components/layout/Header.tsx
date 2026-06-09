@@ -56,7 +56,7 @@ export default function Header() {
             textDecoration: 'none',
           }}
         >
-          <CrownSvg />
+          <img src="/logo.png" alt="Banana Bread King Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
           Banana Bread King
         </Link>
 

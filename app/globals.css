@@ -40,6 +40,11 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+h1, h2, h3, h4 {
+  line-height: 1.15;
+}
+
+
 body {
   background: var(--ink);
   color: var(--cream);
@@ -276,4 +281,11 @@ body.cursor-hot .cursor-dot { width: 4px; height: 4px; }
 .step-visual-3.active {
   transform: scale(1) translateY(0);
 }
+
+@keyframes loaf-bake {
+  0% { transform: scale(0.9) rotate(-3deg); filter: brightness(0.85); }
+  50% { transform: scale(1.04) rotate(1deg); filter: brightness(1.05); }
+  100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+}
+
 

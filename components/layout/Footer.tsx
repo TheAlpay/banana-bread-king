@@ -67,7 +67,7 @@ export default function Footer() {
                 marginBottom: '18px',
               }}
             >
-              <CrownSvg />
+              <img src="/logo.png" alt="Banana Bread King Logo" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
               Banana Bread King
             </div>
             <p style={{ color: 'var(--muted)', fontSize: '14px', maxWidth: '34ch', lineHeight: 1.6 }}>
@@ -102,9 +102,9 @@ export default function Footer() {
               Contact
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '11px' }}>
-              <li><a href="tel:+61413061411" style={{ color: 'var(--cream-dim)', fontSize: '14px', transition: 'color .3s' }}>+61 413 061 411</a></li>
+              <li><a href="tel:+61448550416" style={{ color: 'var(--cream-dim)', fontSize: '14px', transition: 'color .3s' }}>0448 550 416</a></li>
               <li><a href="mailto:info@bananabreadking.com.au" style={{ color: 'var(--cream-dim)', fontSize: '14px', transition: 'color .3s' }}>info@bananabreadking.com.au</a></li>
-              <li style={{ color: 'var(--cream-dim)', fontSize: '14px', lineHeight: 1.4 }}>1/337 Sandgate Road,<br />Albion QLD 4010</li>
+              <li style={{ color: 'var(--cream-dim)', fontSize: '14px', lineHeight: 1.4 }}>Unit 4 / 4 Unley Street,<br />Brendale QLD 4500</li>
             </ul>
           </div>
 

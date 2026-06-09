@@ -87,20 +87,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       "image": "https://bananabreadking.com.au/images/og-image.jpg",
       "@id": "https://bananabreadking.com.au/#localbusiness",
       "url": "https://bananabreadking.com.au",
-      "telephone": "+61 413 061 411",
+      "telephone": "+61 448 550 416",
       "priceRange": "$$",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "1/337 Sandgate Road",
-        "addressLocality": "Albion, Brisbane",
+        "streetAddress": "Unit 4 / 4 Unley Street",
+        "addressLocality": "Brendale, Brisbane",
         "addressRegion": "QLD",
-        "postalCode": "4010",
+        "postalCode": "4500",
         "addressCountry": "AU"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": -27.426284,
-        "longitude": 153.042784
+        "latitude": -27.324546,
+        "longitude": 152.992224
       },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",

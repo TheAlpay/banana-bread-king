@@ -24,7 +24,7 @@ export default function TermsPage() {
           letterSpacing: '.01em',
           color: 'var(--cream)',
           marginBottom: '48px',
-          lineHeight: 0.9,
+          lineHeight: 1.1,
         }}
       >
         Terms &amp; <span style={{ color: 'var(--gold)' }}>Conditions</span>
@@ -46,7 +46,7 @@ export default function TermsPage() {
             1. Sourcing &amp; Culinary Standards (E-A-T Policy)
           </h2>
           <p style={{ marginBottom: '16px' }}>
-            At Banana Bread King, we believe in complete transparency, expertise, and authoritativeness in artisan baking. Every single loaf produced in our Albion kitchen utilizes 100% genuine Queensland bananas sourced from certified local growers in North Queensland.
+            At Banana Bread King, we believe in complete transparency, expertise, and authoritativeness in artisan baking. Every single loaf produced in our Brendale kitchen utilizes 100% genuine Queensland bananas sourced from certified local growers in North Queensland.
           </p>
           <p>
             We strictly avoid artificial food additives, preservatives, or chemical thickeners. Our traditional and gluten-free recipes have been designed by professional pastry chefs with years of experience, ensuring our baking processes represent the highest standard of local food craft in South East Queensland.
@@ -104,8 +104,8 @@ export default function TermsPage() {
             Banana Bread King is a locally owned and operated Queensland business. For inquiries regarding wholesale delivery, corporate catering, or allergen safety, please contact us directly:
           </p>
           <ul style={{ listStyleType: 'none', paddingLeft: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <li>🏢 <strong>Address:</strong> 1/337 Sandgate Road, Albion, 4010, Brisbane, QLD</li>
-            <li>📞 <strong>Phone:</strong> <a href="tel:+61413061411" style={{ color: 'var(--cream)', textDecoration: 'underline' }}>+61 413 061 411</a></li>
+            <li>🏢 <strong>Address:</strong> Unit 4 / 4 Unley Street, Brendale, 4500, QLD, Brisbane</li>
+            <li>📞 <strong>Phone:</strong> <a href="tel:+61448550416" style={{ color: 'var(--cream)', textDecoration: 'underline' }}>0448 550 416</a></li>
             <li>✉️ <strong>Email:</strong> <a href="mailto:info@bananabreadking.com.au" style={{ color: 'var(--cream)', textDecoration: 'underline' }}>info@bananabreadking.com.au</a></li>
             <li>📍 <strong>ABN:</strong> Registered in Queensland, Australia (ABN available on request)</li>
           </ul>
