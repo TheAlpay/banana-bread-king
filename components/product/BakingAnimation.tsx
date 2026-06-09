@@ -48,36 +48,58 @@ const STEPS: Step[] = [
 
 export default function BakingAnimation() {
   const [activeStep, setActiveStep] = useState(1)
+  const [mounted, setMounted] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  
-  // Track scroll position within the section to toggle the visual state
+
   useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return
-      
-      const rect = containerRef.current.getBoundingClientRect()
-      const sectionHeight = rect.height
-      const scrolledIntoSection = -rect.top // how far the top of the section is above the viewport top
-      
-      if (scrolledIntoSection < 0) {
-        setActiveStep(1)
-        return
-      }
-      
-      // Calculate fraction of progress through the section
-      const progressFraction = scrolledIntoSection / (sectionHeight - window.innerHeight)
-      const clampedProgress = Math.max(0, Math.min(progressFraction, 0.99))
-      
-      // Map progress fraction to step index (1 to 4)
-      const stepIndex = Math.floor(clampedProgress * 4) + 1
-      setActiveStep(stepIndex)
-    }
-    
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll() // initial call
-    
-    return () => window.removeEventListener('scroll', handleScroll)
+    setMounted(true)
   }, [])
+  
+  // Track scroll position using IntersectionObserver on step text elements
+  useEffect(() => {
+    if (!mounted) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const stepId = Number(entry.target.getAttribute('data-step-id'))
+            if (stepId && !isNaN(stepId) && stepId >= 1 && stepId <= 4) {
+              setActiveStep(stepId)
+            }
+          }
+        })
+      },
+      {
+        rootMargin: '-35% 0px -35% 0px', // detects when text blocks enter the center of viewport
+        threshold: 0.1
+      }
+    )
+    
+    const elements = document.querySelectorAll('.baking-step-text')
+    elements.forEach((el) => observer.observe(el))
+    
+    return () => {
+      elements.forEach((el) => observer.unobserve(el))
+      observer.disconnect()
+    }
+  }, [mounted])
+
+  if (!mounted) {
+    return (
+      <div
+        style={{
+          position: 'relative',
+          minHeight: '100vh',
+          background: 'var(--ink-2)',
+          borderTop: '1px solid var(--hairline-2)',
+          borderBottom: '1px solid var(--hairline-2)',
+        }}
+      />
+    )
+  }
+
+  const currentStep = STEPS[activeStep - 1] || STEPS[0]
 
   return (
     <div
@@ -141,25 +163,14 @@ export default function BakingAnimation() {
                 width: '300px',
                 height: '300px',
                 borderRadius: '50%',
-                background: `radial-gradient(circle, ${STEPS[activeStep - 1].color}1a 0%, transparent 70%)`,
+                background: `radial-gradient(circle, ${currentStep.color}1a 0%, transparent 70%)`,
                 transition: 'background 0.8s ease',
                 zIndex: 0,
               }}
             />
 
             {/* Step 1: Banana Sourcing Visual */}
-            <div
-              style={{
-                position: 'absolute',
-                opacity: activeStep === 1 ? 1 : 0,
-                transform: activeStep === 1 ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(20px)',
-                transition: 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                zIndex: 1,
-              }}
-            >
+            <div className={`step-visual-container step-visual-1 ${activeStep === 1 ? 'active' : ''}`}>
               <span style={{ fontSize: '100px', filter: 'drop-shadow(0 10px 20px rgba(245,197,24,.3))', animation: 'banana-float 3s ease-in-out infinite' }}>🍌</span>
               <p style={{ marginTop: '24px', fontFamily: 'var(--font-anton)', fontSize: '20px', color: 'var(--gold)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>100% QLD Bananas</p>
               <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
@@ -170,18 +181,7 @@ export default function BakingAnimation() {
             </div>
 
             {/* Step 2: Mixing Visual */}
-            <div
-              style={{
-                position: 'absolute',
-                opacity: activeStep === 2 ? 1 : 0,
-                transform: activeStep === 2 ? 'scale(1) rotate(0deg)' : 'scale(0.8) rotate(-15deg)',
-                transition: 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                zIndex: 1,
-              }}
-            >
+            <div className={`step-visual-container step-visual-2 ${activeStep === 2 ? 'active' : ''}`}>
               <div style={{ position: 'relative', width: '120px', height: '120px', display: 'grid', placeItems: 'center' }}>
                 <span style={{ fontSize: '90px' }}>🥣</span>
                 {/* Rotating folding swirl */}
@@ -203,18 +203,7 @@ export default function BakingAnimation() {
             </div>
 
             {/* Step 3: Oven Bake Visual */}
-            <div
-              style={{
-                position: 'absolute',
-                opacity: activeStep === 3 ? 1 : 0,
-                transform: activeStep === 3 ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(-20px)',
-                transition: 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                zIndex: 1,
-              }}
-            >
+            <div className={`step-visual-container step-visual-3 ${activeStep === 3 ? 'active' : ''}`}>
               <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <span style={{ fontSize: '110px', animation: 'oven-glow 2s ease-in-out infinite' }}>🔥</span>
                 <div
@@ -235,18 +224,7 @@ export default function BakingAnimation() {
             </div>
 
             {/* Step 4: Slices & Steaming Visual */}
-            <div
-              style={{
-                position: 'absolute',
-                opacity: activeStep === 4 ? 1 : 0,
-                transform: activeStep === 4 ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(20px)',
-                transition: 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                zIndex: 1,
-              }}
-            >
+            <div className={`step-visual-container step-visual-4 ${activeStep === 4 ? 'active' : ''}`}>
               <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <span style={{ fontSize: '110px' }}>🍞</span>
                 {/* Steaming lines */}
@@ -325,6 +303,8 @@ export default function BakingAnimation() {
               return (
                 <div
                   key={step.id}
+                  data-step-id={step.id}
+                  className="baking-step-text"
                   style={{
                     minHeight: '50vh',
                     display: 'flex',

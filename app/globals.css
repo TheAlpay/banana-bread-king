@@ -236,3 +236,44 @@ body.cursor-hot .cursor-dot { width: 4px; height: 4px; }
 .pcard-dark:nth-child(even) { transform: translateY(34px); }
 .pcard-dark:hover { transform: translateY(-10px); border-color: rgba(245,197,24,.5); box-shadow: 0 30px 60px -24px rgba(245,197,24,.35); }
 .pcard-dark:nth-child(even):hover { transform: translateY(24px); }
+
+/* === STEP VISUALS FOR BAKING ANIMATION === */
+.step-visual-container {
+  position: absolute;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  pointer-events: none;
+}
+.step-visual-container.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Step 1 & 4 transforms */
+.step-visual-1, .step-visual-4 {
+  transform: scale(0.8) translateY(20px);
+}
+.step-visual-1.active, .step-visual-4.active {
+  transform: scale(1) translateY(0);
+}
+
+/* Step 2 transforms */
+.step-visual-2 {
+  transform: scale(0.8) rotate(-15deg);
+}
+.step-visual-2.active {
+  transform: scale(1) rotate(0deg);
+}
+
+/* Step 3 transforms */
+.step-visual-3 {
+  transform: scale(0.8) translateY(-20px);
+}
+.step-visual-3.active {
+  transform: scale(1) translateY(0);
+}
+

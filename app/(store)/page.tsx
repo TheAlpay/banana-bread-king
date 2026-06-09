@@ -57,6 +57,7 @@ const fmt = (cents: number) => `$${(cents / 100).toFixed(2)}`
 
 export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [mounted, setMounted] = useState(false)
 
   // Builder state
   const [size, setSize]           = useState<SizeKey>('600g')
@@ -67,6 +68,7 @@ export default function HomePage() {
   const [particles, setParticles] = useState<ParticleStyle[]>([])
 
   useEffect(() => {
+    setMounted(true)
     setParticles(
       Array.from({ length: 26 }, () => ({
         left:     `${Math.random() * 100}%`,
@@ -80,6 +82,7 @@ export default function HomePage() {
 
   // Scroll reveals
   useEffect(() => {
+    if (!mounted) return
     const io = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
@@ -92,7 +95,7 @@ export default function HomePage() {
     )
     document.querySelectorAll('.reveal').forEach((el) => io.observe(el))
     return () => io.disconnect()
-  }, [])
+  }, [mounted])
 
   // Builder helpers
   const currentRange   = RANGES[range]
@@ -123,24 +126,27 @@ export default function HomePage() {
         }}
       >
         {/* Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{
-            position:      'absolute',
-            top:           0,
-            left:          0,
-            width:         '100%',
-            height:        '100%',
-            objectFit:     'cover',
-            zIndex:        0,
-            opacity:       0.78,
-          }}
-        >
-          <source src="/hero.mp4" type="video/mp4" />
-        </video>
+        {mounted && (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              position:      'absolute',
+              top:           0,
+              left:          0,
+              width:         '100%',
+              height:        '100%',
+              objectFit:     'cover',
+              zIndex:        0,
+              opacity:       0.78,
+            }}
+          >
+            <source src="/hero.mp4" type="video/mp4" />
+          </video>
+        )}
+
 
         {/* Video Overlay Gradient (for premium dark aesthetic & text contrast) */}
         <div
